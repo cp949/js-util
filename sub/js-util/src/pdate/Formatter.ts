@@ -1,7 +1,4 @@
 import dayjs from 'dayjs';
-import advancedFormat from 'dayjs/plugin/advancedFormat';
-
-dayjs.extend(advancedFormat);
 
 function pad(num: number, len: number): string {
   let str = '' + num;

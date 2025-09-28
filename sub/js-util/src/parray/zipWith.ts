@@ -15,12 +15,20 @@ console.log(result);
 export function zipWith<T extends any[], U>(
   arrays: { [K in keyof T]: readonly T[K][] },
   iteratee: (...args: T) => U,
+): U[];
+export function zipWith<T, U>(
+  arrays: readonly (readonly T[])[],
+  iteratee: (...args: T[]) => U,
+): U[];
+export function zipWith<T extends any[], U>(
+  arrays: { [K in keyof T]: readonly T[K][] } | readonly (readonly any[])[],
+  iteratee: (...args: any[]) => U,
 ): U[] {
   const maxLength = Math.max(...arrays.map((arr) => arr.length));
   const result: U[] = [];
 
   for (let i = 0; i < maxLength; i++) {
-    const args: T = arrays.map((arr) => arr[i]) as T;
+    const args = arrays.map((arr) => arr[i]);
     result.push(iteratee(...args));
   }
 
