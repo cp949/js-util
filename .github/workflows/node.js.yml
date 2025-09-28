@@ -44,7 +44,7 @@ jobs:
         run: pnpm build
 
       - name: Run tests
-        run: pnpm --filter @cp949/js-util test
+        run: pnpm test
 
       - name: Check package contents
         run: |
