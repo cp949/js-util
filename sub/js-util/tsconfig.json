@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "outDir": "dist",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "types": ["vitest/globals"],
+    "module": "node16",
+    "moduleResolution": "node16",
+    "target": "ES2022", // Node.js 18
+    "composite": false,
+    "esModuleInterop": true,
+    "newLine": "lf",
+    "declaration": true,
+    "stripInternal": true,
+    "forceConsistentCasingInFileNames": true,
+    "useDefineForClassFields": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noEmitOnError": true,
+    "inlineSources": false,
+    "isolatedModules": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "preserveSymlinks": false,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "strict": true
+  },
+  "include": ["src", "tsup.config.ts", "vitest.config.ts", "__tests__"],
+  "exclude": ["node_modules", "dist"]
+}

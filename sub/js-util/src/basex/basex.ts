@@ -1,0 +1,257 @@
+// Originial code at https://github.com/holtwick/zeed/blob/master/src/common/data/basex.ts
+
+let _textEncoder: (data: string) => Uint8Array;
+
+type BinInput = Uint8Array | ArrayBuffer | string | number[];
+type EncodeFn = (source: BinInput, padToLength?: number) => string;
+type DecodeFn = (source: string, padToLength?: number) => Uint8Array;
+
+function _encodeUtf8Polyfill(str: string): Uint8Array {
+  const encodedString = unescape(encodeURIComponent(str));
+  const len = encodedString.length;
+  const buf = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    buf[i] = encodedString.codePointAt(i) || 0;
+  }
+  return buf;
+}
+
+export function stringToUInt8Array(text: string): Uint8Array {
+  if (!_textEncoder) {
+    _textEncoder = _encodeUtf8Polyfill;
+    if (typeof TextEncoder !== 'undefined') {
+      const encoder = new TextEncoder();
+      _textEncoder = (data) => encoder.encode(data);
+    }
+  }
+  return _textEncoder(text.normalize('NFC'));
+}
+
+function toUint8Array(data: BinInput): Uint8Array {
+  if (data instanceof ArrayBuffer) return new Uint8Array(data);
+  if (typeof data === 'string') return stringToUInt8Array(data);
+  if (data.length) return new Uint8Array(data);
+  return data as Uint8Array;
+}
+
+const alphabets = {
+  '2': '01',
+  '8': '01234567',
+  '11': '0123456789a',
+  '16': '0123456789abcdef',
+  '32': '0123456789abcdefghjkmnpqrtuvwxyz', // Agnoster, because least mix up and good sorting
+  '32-crockford': '0123456789ABCDEFGHJKMNPQRSTVWXYZ', // Crockford
+  '32-geohash': '0123456789bcdefghjkmnpqrstuvwxyz', // https://en.wikipedia.org/wiki/Base32#Geohash
+  '32-agnoster': '0123456789abcdefghjkmnpqrtuvwxyz', // https://github.com/agnoster/base32-js/blob/master/lib/base32.js#L6 without i(1), l(1), o(0), s(5); keeps sort order
+  '32-rfc': 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567', // https://datatracker.ietf.org/doc/html/rfc4648#section-6
+  '32-hex': '0123456789ABCDEFGHIJKLMNOPQRSTUV', // https://datatracker.ietf.org/doc/html/rfc4648#section-7
+  '32-zbase': 'ybndrfg8ejkmcpqxot1uwisza345h769', //  https://en.wikipedia.org/wiki/Base32#z-base-32
+  '36': '0123456789abcdefghijklmnopqrstuvwxyz',
+  '58': '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz',
+  '62': '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', // Correct sort order
+  '64': 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',
+  '64-url': 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_', // https://datatracker.ietf.org/doc/html/rfc4648#section-5
+  '66': 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.!~',
+  '85': '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&()*+-;<=>?@^_`{|}~', // https://datatracker.ietf.org/doc/html/rfc1924#section-4.2
+};
+
+export function _useBase(alphaOrBase: string | number): {
+  encode: EncodeFn;
+  decode: DecodeFn;
+} {
+  let ALPHABET: string | undefined = (alphabets as any)[String(alphaOrBase)];
+
+  if (!ALPHABET) {
+    if (typeof alphaOrBase === 'string') {
+      ALPHABET = alphaOrBase;
+    } else {
+      throw new Error(`Unknown base ${alphaOrBase}`);
+    }
+  }
+
+  if (ALPHABET.length >= 255) throw new Error('Alphabet too long');
+
+  const BASE_MAP = new Uint8Array(256);
+  for (let j = 0; j < BASE_MAP.length; j++) BASE_MAP[j] = 255;
+
+  for (let i = 0; i < ALPHABET.length; i++) {
+    const x = ALPHABET.charAt(i);
+    const xc = x.charCodeAt(0);
+
+    if (BASE_MAP[xc] !== 255) throw new TypeError(`${x} is ambiguous`);
+    BASE_MAP[xc] = i;
+  }
+
+  const BASE = ALPHABET.length;
+  const LEADER = ALPHABET.charAt(0);
+  const FACTOR = Math.log(BASE) / Math.log(256); // log(BASE) / log(256), rounded up
+  const iFACTOR = Math.log(256) / Math.log(BASE); // log(256) / log(BASE), rounded up
+
+  function encode(source: BinInput, padToLength = -1): string {
+    const data = toUint8Array(source);
+    if (data.byteLength === 0) return '';
+
+    // Skip & count leading zeroes.
+    let length = 0;
+    let pbegin = 0;
+    const pend = data.byteLength;
+
+    while (pbegin !== pend && data[pbegin] === 0) pbegin++;
+
+    // Allocate enough space in big-endian base58 representation.
+    const size = ((pend - pbegin) * iFACTOR + 1) >>> 0;
+    const dataEncoded = new Uint8Array(size);
+
+    // Process the bytes.
+    while (pbegin !== pend) {
+      let carry = data[pbegin];
+
+      // Apply "dataEncoded = dataEncoded * 256 + ch".
+      let i = 0;
+      for (let it1 = size - 1; (carry !== 0 || i < length) && it1 !== -1; it1--, i++) {
+        carry += (256 * dataEncoded[it1]) >>> 0;
+        dataEncoded[it1] = carry % BASE >>> 0;
+        carry = (carry / BASE) >>> 0;
+      }
+
+      if (carry !== 0) {
+        // log.warn('Non-zero carry', data, padToLength, i, size)
+        throw new Error('Non-zero carry');
+      }
+
+      length = i;
+      pbegin++;
+    }
+
+    let it2 = size - length;
+
+    // Skip leading zeroes
+    while (it2 !== size && dataEncoded[it2] === 0) it2++;
+
+    // Translate the result into a string.
+    let str = '';
+    for (; it2 < size; ++it2) str += ALPHABET!.charAt(dataEncoded[it2]);
+
+    if (padToLength > 0) {
+      // const pad = Math.ceil(source.length * iFACTOR)
+      return str.padStart(padToLength, LEADER);
+    }
+    return str;
+  }
+
+  function decode(source: string, padToLength = -1): Uint8Array {
+    if (typeof source !== 'string') throw new TypeError('Expected String');
+    if (source.length === 0) return new Uint8Array();
+
+    // Normalize
+    source = source.replace(/\s+/g, '');
+
+    let psz = 0;
+    let length = 0;
+
+    while (source[psz] === LEADER) psz++;
+
+    // Allocate enough space in big-endian base256 representation.
+    const size = ((source.length - psz) * FACTOR + 1) >>> 0; // log(58) / log(256), rounded up.
+    const dataDecoded = new Uint8Array(size);
+
+    // Process the characters.
+    while (source[psz]) {
+      let carry = BASE_MAP[source.charCodeAt(psz)];
+
+      // Invalid character
+      if (carry === 255) throw new Error(`Unsupported character "${source[psz]}"`);
+
+      let i = 0;
+      for (let it3 = size - 1; (carry !== 0 || i < length) && it3 !== -1; it3--, i++) {
+        carry += (BASE * dataDecoded[it3]) >>> 0;
+        dataDecoded[it3] = carry % 256 >>> 0;
+        carry = (carry / 256) >>> 0;
+      }
+
+      if (carry !== 0) throw new Error('Non-zero carry');
+      length = i;
+      psz++;
+    }
+
+    // Skip leading zeroes
+    let it4 = size - length;
+    while (it4 !== size && dataDecoded[it4] === 0) it4++;
+
+    if (padToLength > 0) {
+      return new Uint8Array([
+        ...new Uint8Array(padToLength - dataDecoded.length + it4),
+        ...dataDecoded.slice(it4),
+      ]);
+    }
+
+    return dataDecoded.slice(it4);
+  }
+
+  return {
+    encode,
+    decode,
+  };
+}
+
+let cache: Map<number | string, any> | undefined;
+
+export function useBase(alphaOrBase: string | number): {
+  encode: EncodeFn;
+  decode: DecodeFn;
+} {
+  if (cache == null) cache = new Map();
+
+  let fn = cache.get(alphaOrBase);
+  if (fn == null) {
+    fn = _useBase(alphaOrBase);
+    cache.set(alphaOrBase, fn);
+  }
+  return fn;
+}
+
+// Shortcuts
+
+export function encodeB16(bin: BinInput, padding = -1): string {
+  return useBase(16).encode(bin, padding);
+}
+
+export function decodeB16(s: string, padding = -1): Uint8Array {
+  return useBase(16).decode(s.toLowerCase(), padding);
+}
+
+export function encodeB32(bin: BinInput, padding = -1): string {
+  return useBase(32).encode(bin, padding);
+}
+
+export function decodeB32(s: string, padding = -1): Uint8Array {
+  return useBase(32).decode(
+    s
+      .toLocaleLowerCase()
+      .replace(/l/g, '1')
+      .replace(/s/g, '5')
+      .replace(/o/g, '0')
+      .replace(/i/g, '1'),
+    padding,
+  );
+}
+
+export function encodeB58(bin: BinInput, padding = -1): string {
+  return useBase(58).encode(bin, padding);
+}
+
+export function decodeB58(s: string, padding = -1): Uint8Array {
+  return useBase(58).decode(s, padding);
+}
+
+export function encodeB62(bin: BinInput, padding = -1): string {
+  return useBase(62).encode(bin, padding);
+}
+
+export function decodeB62(s: string, padding = -1): Uint8Array {
+  return useBase(62).decode(s, padding);
+}
+
+export function estimateSizeForBase(bytes: number, base: number): number {
+  return Math.ceil(bytes * (Math.log(256) / Math.log(base)));
+}

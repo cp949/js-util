@@ -1,0 +1,242 @@
+{
+  "name": "@cp949/js-util",
+  "version": "1.0.31",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "tsup --clean",
+    "dev": "npm run build -- --watch",
+    "lint": "eslint .",
+    "typecheck": "tsc --pretty --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^24.3.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "dayjs": "^1.11.12",
+    "eslint": "^9.34.0",
+    "jsdom": "^26.1.0",
+    "shelljs": "^0.10.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "peerDependencies": {
+    "dayjs": "^1"
+  },
+  "peerDependenciesMeta": {
+    "dayjs": {
+      "optional": true
+    }
+  },
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./index.d.cts",
+        "default": "./index.cjs"
+      },
+      "import": {
+        "types": "./index.d.ts",
+        "default": "./index.js"
+      }
+    },
+    "./base64": {
+      "require": {
+        "types": "./base64/index.d.cts",
+        "default": "./base64/index.cjs"
+      },
+      "import": {
+        "types": "./base64/index.d.ts",
+        "default": "./base64/index.js"
+      }
+    },
+    "./browser": {
+      "require": {
+        "types": "./browser/index.d.cts",
+        "default": "./browser/index.cjs"
+      },
+      "import": {
+        "types": "./browser/index.d.ts",
+        "default": "./browser/index.js"
+      }
+    },
+    "./array": {
+      "require": {
+        "types": "./array/index.d.cts",
+        "default": "./array/index.cjs"
+      },
+      "import": {
+        "types": "./array/index.d.ts",
+        "default": "./array/index.js"
+      }
+    },
+    "./file": {
+      "require": {
+        "types": "./file/index.d.cts",
+        "default": "./file/index.cjs"
+      },
+      "import": {
+        "types": "./file/index.d.ts",
+        "default": "./file/index.js"
+      }
+    },
+    "./http": {
+      "require": {
+        "types": "./http/index.d.cts",
+        "default": "./http/index.cjs"
+      },
+      "import": {
+        "types": "./http/index.d.ts",
+        "default": "./http/index.js"
+      }
+    },
+    "./date": {
+      "require": {
+        "types": "./date/index.d.cts",
+        "default": "./date/index.cjs"
+      },
+      "import": {
+        "types": "./date/index.d.ts",
+        "default": "./date/index.js"
+      }
+    },
+    "./dom": {
+      "require": {
+        "types": "./dom/index.d.cts",
+        "default": "./dom/index.cjs"
+      },
+      "import": {
+        "types": "./dom/index.d.ts",
+        "default": "./dom/index.js"
+      }
+    },
+    "./math": {
+      "require": {
+        "types": "./math/index.d.cts",
+        "default": "./math/index.cjs"
+      },
+      "import": {
+        "types": "./math/index.d.ts",
+        "default": "./math/index.js"
+      }
+    },
+    "./misc": {
+      "require": {
+        "types": "./misc/index.d.cts",
+        "default": "./misc/index.cjs"
+      },
+      "import": {
+        "types": "./misc/index.d.ts",
+        "default": "./misc/index.js"
+      }
+    },
+    "./random": {
+      "require": {
+        "types": "./random/index.d.cts",
+        "default": "./random/index.cjs"
+      },
+      "import": {
+        "types": "./random/index.d.ts",
+        "default": "./random/index.js"
+      }
+    },
+    "./string": {
+      "require": {
+        "types": "./string/index.d.cts",
+        "default": "./string/index.cjs"
+      },
+      "import": {
+        "types": "./string/index.d.ts",
+        "default": "./string/index.js"
+      }
+    },
+    "./type": {
+      "require": {
+        "types": "./type/index.d.cts",
+        "default": "./type/index.cjs"
+      },
+      "import": {
+        "types": "./type/index.d.ts",
+        "default": "./type/index.js"
+      }
+    },
+    "./usermedia": {
+      "require": {
+        "types": "./usermedia/index.d.cts",
+        "default": "./usermedia/index.cjs"
+      },
+      "import": {
+        "types": "./usermedia/index.d.ts",
+        "default": "./usermedia/index.js"
+      }
+    },
+    "./web": {
+      "require": {
+        "types": "./web/index.d.cts",
+        "default": "./web/index.cjs"
+      },
+      "import": {
+        "types": "./web/index.d.ts",
+        "default": "./web/index.js"
+      }
+    },
+    "./eventemitter": {
+      "require": {
+        "types": "./eventemitter/index.d.cts",
+        "default": "./eventemitter/index.cjs"
+      },
+      "import": {
+        "types": "./eventemitter/index.d.ts",
+        "default": "./eventemitter/index.js"
+      }
+    },
+    "./uint8-array": {
+      "require": {
+        "types": "./uint8-array/index.d.cts",
+        "default": "./uint8-array/index.cjs"
+      },
+      "import": {
+        "types": "./uint8-array/index.d.ts",
+        "default": "./uint8-array/index.js"
+      }
+    },
+    "./dataurl": {
+      "require": {
+        "types": "./dataurl/index.d.cts",
+        "default": "./dataurl/index.cjs"
+      },
+      "import": {
+        "types": "./dataurl/index.d.ts",
+        "default": "./dataurl/index.js"
+      }
+    },
+    "./fn": {
+      "require": {
+        "types": "./fn/index.d.cts",
+        "default": "./fn/index.cjs"
+      },
+      "import": {
+        "types": "./fn/index.d.ts",
+        "default": "./fn/index.js"
+      }
+    },
+    "./easing": {
+      "require": {
+        "types": "./easing/index.d.cts",
+        "default": "./easing/index.cjs"
+      },
+      "import": {
+        "types": "./easing/index.d.ts",
+        "default": "./easing/index.js"
+      }
+    }
+  }
+}

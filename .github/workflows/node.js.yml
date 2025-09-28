@@ -1,0 +1,60 @@
+name: Deploy to NPM from Release Branch
+
+on:
+  push:
+    branches:
+      - 'release'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # 오직 release 브랜치에서만 실행
+    if: github.ref == 'refs/heads/release'
+    environment:
+      name: production
+      url: https://www.npmjs.com/package/@cp949/js-util
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 'release'
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          registry-url: https://registry.npmjs.org
+          scope: '@cp949'
+      - uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run type check
+        run: pnpm typecheck
+
+      - name: Run linting
+        run: pnpm lint
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Run tests
+        run: pnpm --filter @cp949/js-util test
+
+      - name: Check package contents
+        run: |
+          echo "Package contents:"
+          cd sub/js-util
+          npm pack --dry-run
+          echo "Package version:"
+          node -e "console.log('v' + require('./package.json').version)"
+
+      - name: Publish to NPM
+        run: cd sub/js-util && npm publish --access=public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
