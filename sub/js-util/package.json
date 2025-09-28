@@ -1,6 +1,6 @@
 {
   "name": "@cp949/js-util",
-  "version": "1.0.36",
+  "version": "1.0.37",
   "main": "./dist/index.js",
   "types": "./dist/dist/index.d.ts",
   "license": "MIT",
