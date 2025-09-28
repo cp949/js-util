@@ -2,9 +2,10 @@
   "name": "@cp949/js-util-monorepo",
   "private": false,
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build --filter=@cp949/js-util",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
+    "test": "turbo run test --filter=@cp949/js-util",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "typecheck": "turbo run typecheck"
   },

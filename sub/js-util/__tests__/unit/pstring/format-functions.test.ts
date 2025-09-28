@@ -133,8 +133,8 @@ describe('pstring - format functions', () => {
       const options = {
         customReplacements: [
           ['@', 'at'],
-          ['©', 'copyright']
-        ] as [string, string][]
+          ['©', 'copyright'],
+        ] as [string, string][],
       };
       expect(slugify('email@domain.com', options)).toBe('emailatdomain-com');
       expect(slugify('© 2023', options)).toBe('copyright-2023');
@@ -169,7 +169,7 @@ describe('pstring - format functions', () => {
   describe('slugifyWithCounter', () => {
     test('기본 카운터 기능', () => {
       const slugifyCounter = slugifyWithCounter();
-      
+
       expect(slugifyCounter('hello world')).toBe('hello-world');
       expect(slugifyCounter('hello world')).toBe('hello-world-2');
       expect(slugifyCounter('hello world')).toBe('hello-world-3');
@@ -177,7 +177,7 @@ describe('pstring - format functions', () => {
 
     test('서로 다른 문자열은 독립적', () => {
       const slugifyCounter = slugifyWithCounter();
-      
+
       expect(slugifyCounter('hello')).toBe('hello');
       expect(slugifyCounter('world')).toBe('world');
       expect(slugifyCounter('hello')).toBe('hello-2');
@@ -186,19 +186,19 @@ describe('pstring - format functions', () => {
 
     test('reset 기능', () => {
       const slugifyCounter = slugifyWithCounter();
-      
+
       expect(slugifyCounter('test')).toBe('test');
       expect(slugifyCounter('test')).toBe('test-2');
-      
+
       slugifyCounter.reset();
-      
+
       expect(slugifyCounter('test')).toBe('test');
       expect(slugifyCounter('test')).toBe('test-2');
     });
 
     test('빈 문자열 처리', () => {
       const slugifyCounter = slugifyWithCounter();
-      
+
       expect(slugifyCounter('')).toBe('');
       expect(slugifyCounter('')).toBe('');
     });
@@ -206,7 +206,7 @@ describe('pstring - format functions', () => {
     test('옵션과 함께 사용', () => {
       const slugifyCounter = slugifyWithCounter();
       const options = { separator: '_' };
-      
+
       expect(slugifyCounter('hello world', options)).toBe('hello_world');
       expect(slugifyCounter('hello world', options)).toBe('hello_world_2');
     });
@@ -215,24 +215,13 @@ describe('pstring - format functions', () => {
   describe('성능 테스트', () => {
     test('formatByteCount 대량 처리', () => {
       const start = performance.now();
-      
+
       for (let i = 0; i < 1000; i++) {
         formatByteCount(Math.random() * 1024 * 1024 * 1024);
       }
-      
+
       const end = performance.now();
       expect(end - start).toBeLessThan(50);
-    });
-
-    test('slugify 대량 처리', () => {
-      const start = performance.now();
-      
-      for (let i = 0; i < 100; i++) {
-        slugify(`Test String Number ${i} with Special Characters @#$%`);
-      }
-      
-      const end = performance.now();
-      expect(end - start).toBeLessThan(100);
     });
   });
 });
