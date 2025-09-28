@@ -20,6 +20,7 @@ export * from './isEmpty.js';
 export * from './isNotBlank.js';
 export * from './isNotEmpty.js';
 export * from './isNumeric.js';
+export * from './isUnicodeBlank.js';
 export * from './kebabToConstant.js';
 export * from './kebabToPascal.js';
 export * from './limitMaxLength.js';
