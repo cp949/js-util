@@ -38,7 +38,7 @@ describe('types - Missing Type Guards', () => {
     test('should return true for DOM elements', () => {
       const div = document.createElement('div');
       expect(isElement(div)).toBe(true);
-      
+
       const span = document.createElement('span');
       expect(isElement(span)).toBe(true);
     });
@@ -54,7 +54,7 @@ describe('types - Missing Type Guards', () => {
 
   describe('isFunction', () => {
     test('should return true for regular functions', () => {
-      expect(isFunction(function() {})).toBe(true);
+      expect(isFunction(function () {})).toBe(true);
       expect(isFunction(() => {})).toBe(true);
       expect(isFunction(Array.isArray)).toBe(true);
     });
@@ -70,7 +70,9 @@ describe('types - Missing Type Guards', () => {
 
   describe('isGenerator', () => {
     test('should return true for generator objects', () => {
-      function* genFn() { yield 1; }
+      function* genFn() {
+        yield 1;
+      }
       const gen = genFn();
       expect(isGenerator(gen)).toBe(true);
     });
@@ -85,7 +87,9 @@ describe('types - Missing Type Guards', () => {
 
   describe('isGeneratorFunction', () => {
     test('should return true for generator functions', () => {
-      function* genFn() { yield 1; }
+      function* genFn() {
+        yield 1;
+      }
       expect(isGeneratorFunction(genFn)).toBe(true);
     });
 
@@ -93,7 +97,7 @@ describe('types - Missing Type Guards', () => {
       expect(isGeneratorFunction(null)).toBe(false);
       expect(isGeneratorFunction(undefined)).toBe(false);
       expect(isGeneratorFunction({})).toBe(false);
-      expect(isGeneratorFunction(function() {})).toBe(false);
+      expect(isGeneratorFunction(function () {})).toBe(false);
       expect(isGeneratorFunction(() => {})).toBe(false);
     });
   });
@@ -186,7 +190,7 @@ describe('types - Missing Type Guards', () => {
       expect(isPlainObject(undefined)).toBe(false);
       expect(isPlainObject([])).toBe(false);
       expect(isPlainObject(new Date())).toBe(false);
-      expect(isPlainObject(function() {})).toBe(false);
+      expect(isPlainObject(function () {})).toBe(false);
     });
   });
 

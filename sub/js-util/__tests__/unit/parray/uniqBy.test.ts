@@ -8,16 +8,16 @@ describe('parray - uniqBy functions', () => {
         { id: 1, name: 'John' },
         { id: 2, name: 'Jane' },
         { id: 1, name: 'Johnny' },
-        { id: 3, name: 'Bob' }
+        { id: 3, name: 'Bob' },
       ];
-      
+
       const result = uniqBy(users, 'id');
-      
+
       expect(result).toHaveLength(3);
       expect(result).toEqual([
         { id: 1, name: 'John' },
         { id: 2, name: 'Jane' },
-        { id: 3, name: 'Bob' }
+        { id: 3, name: 'Bob' },
       ]);
       expect(result).toBe(users); // 동일한 배열 참조
     });
@@ -27,25 +27,25 @@ describe('parray - uniqBy functions', () => {
         { id: 1, name: 'John' },
         { id: 2, name: 'Jane' },
         { id: 1, name: 'Johnny' },
-        { id: 3, name: 'Bob' }
+        { id: 3, name: 'Bob' },
       ];
-      
-      const result = uniqBy(users, user => user.id);
-      
+
+      const result = uniqBy(users, (user) => user.id);
+
       expect(result).toHaveLength(3);
       expect(result).toEqual([
         { id: 1, name: 'John' },
         { id: 2, name: 'Jane' },
-        { id: 3, name: 'Bob' }
+        { id: 3, name: 'Bob' },
       ]);
       expect(result).toBe(users); // 동일한 배열 참조
     });
 
     test('should handle primitive values with function', () => {
       const numbers = [1, 2, 3, 1, 4, 2, 5];
-      
-      const result = uniqBy(numbers, n => n);
-      
+
+      const result = uniqBy(numbers, (n) => n);
+
       expect(result).toEqual([1, 2, 3, 4, 5]);
       expect(result).toBe(numbers); // 동일한 배열 참조
     });
@@ -53,7 +53,7 @@ describe('parray - uniqBy functions', () => {
     test('should handle empty array', () => {
       const empty: any[] = [];
       const result = uniqBy(empty, 'id');
-      
+
       expect(result).toEqual([]);
       expect(result).toBe(empty);
     });
@@ -62,11 +62,11 @@ describe('parray - uniqBy functions', () => {
       const users = [
         { id: 1, name: 'John' },
         { id: 2, name: 'Jane' },
-        { id: 3, name: 'Bob' }
+        { id: 3, name: 'Bob' },
       ];
-      
+
       const result = uniqBy(users, 'id');
-      
+
       expect(result).toHaveLength(3);
       expect(result).toEqual(users);
       expect(result).toBe(users);
@@ -76,11 +76,11 @@ describe('parray - uniqBy functions', () => {
       const users = [
         { id: 1, name: 'John' },
         { id: 1, name: 'Jane' },
-        { id: 1, name: 'Bob' }
+        { id: 1, name: 'Bob' },
       ];
-      
+
       const result = uniqBy(users, 'id');
-      
+
       expect(result).toHaveLength(1);
       expect(result).toEqual([{ id: 1, name: 'John' }]);
       expect(result).toBe(users);
@@ -93,17 +93,17 @@ describe('parray - uniqBy functions', () => {
         { id: 1, name: 'John' },
         { id: 2, name: 'Jane' },
         { id: 1, name: 'Johnny' },
-        { id: 3, name: 'Bob' }
+        { id: 3, name: 'Bob' },
       ];
       const originalUsers = [...users];
-      
+
       const result = $uniqBy(users, 'id');
-      
+
       expect(result).toHaveLength(3);
       expect(result).toEqual([
         { id: 1, name: 'John' },
         { id: 2, name: 'Jane' },
-        { id: 3, name: 'Bob' }
+        { id: 3, name: 'Bob' },
       ]);
       expect(result).not.toBe(users); // 다른 배열 참조
       expect(users).toEqual(originalUsers); // 원본 배열 유지
@@ -114,17 +114,17 @@ describe('parray - uniqBy functions', () => {
         { id: 1, name: 'John' },
         { id: 2, name: 'Jane' },
         { id: 1, name: 'Johnny' },
-        { id: 3, name: 'Bob' }
+        { id: 3, name: 'Bob' },
       ];
       const originalUsers = [...users];
-      
-      const result = $uniqBy(users, user => user.id);
-      
+
+      const result = $uniqBy(users, (user) => user.id);
+
       expect(result).toHaveLength(3);
       expect(result).toEqual([
         { id: 1, name: 'John' },
         { id: 2, name: 'Jane' },
-        { id: 3, name: 'Bob' }
+        { id: 3, name: 'Bob' },
       ]);
       expect(result).not.toBe(users); // 다른 배열 참조
       expect(users).toEqual(originalUsers); // 원본 배열 유지
@@ -133,9 +133,9 @@ describe('parray - uniqBy functions', () => {
     test('should handle primitive values with function', () => {
       const numbers = [1, 2, 3, 1, 4, 2, 5];
       const originalNumbers = [...numbers];
-      
-      const result = $uniqBy(numbers, n => n);
-      
+
+      const result = $uniqBy(numbers, (n) => n);
+
       expect(result).toEqual([1, 2, 3, 4, 5]);
       expect(result).not.toBe(numbers); // 다른 배열 참조
       expect(numbers).toEqual(originalNumbers); // 원본 배열 유지
@@ -144,7 +144,7 @@ describe('parray - uniqBy functions', () => {
     test('should handle empty array', () => {
       const empty: any[] = [];
       const result = $uniqBy(empty, 'id');
-      
+
       expect(result).toEqual([]);
       expect(result).not.toBe(empty); // 다른 배열 참조
     });
@@ -153,15 +153,15 @@ describe('parray - uniqBy functions', () => {
       const users: ReadonlyArray<{ id: number; name: string }> = [
         { id: 1, name: 'John' },
         { id: 2, name: 'Jane' },
-        { id: 1, name: 'Johnny' }
+        { id: 1, name: 'Johnny' },
       ];
-      
+
       const result = $uniqBy(users, 'id');
-      
+
       expect(result).toHaveLength(2);
       expect(result).toEqual([
         { id: 1, name: 'John' },
-        { id: 2, name: 'Jane' }
+        { id: 2, name: 'Jane' },
       ]);
     });
 
@@ -170,15 +170,15 @@ describe('parray - uniqBy functions', () => {
         { id: 1, name: 'John', category: 'A' },
         { id: 2, name: 'Jane', category: 'B' },
         { id: 3, name: 'Johnny', category: 'A' },
-        { id: 4, name: 'Bob', category: 'B' }
+        { id: 4, name: 'Bob', category: 'B' },
       ];
-      
-      const result = $uniqBy(users, user => user.category);
-      
+
+      const result = $uniqBy(users, (user) => user.category);
+
       expect(result).toHaveLength(2);
       expect(result).toEqual([
         { id: 1, name: 'John', category: 'A' },
-        { id: 2, name: 'Jane', category: 'B' }
+        { id: 2, name: 'Jane', category: 'B' },
       ]);
     });
   });

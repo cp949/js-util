@@ -10,7 +10,7 @@ import {
   isDigit,
   formatByteCount,
   trimLeft,
-  trimRight
+  trimRight,
 } from '../../../src/pstring/index.js';
 
 describe('pstring - Additional Functions', () => {
@@ -193,7 +193,6 @@ describe('pstring - Additional Functions', () => {
       expect(formatByteCount(-1024)).toBe('-1024 bytes'); // 음수는 단순히 bytes로 표시
     });
   });
-
 
   describe('trimLeft', () => {
     test('왼쪽 공백 제거', () => {

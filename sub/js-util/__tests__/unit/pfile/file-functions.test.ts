@@ -158,7 +158,7 @@ describe('pfile - file functions', () => {
     test('매우 긴 파일명 처리', () => {
       const longFileName = 'a'.repeat(1000);
       const longFileWithExt = longFileName + '.txt';
-      
+
       expect(fileExtension(longFileWithExt)).toBe('txt');
       expect(fileNamePart(longFileWithExt)).toBe(longFileName);
     });
@@ -193,13 +193,13 @@ describe('pfile - file functions', () => {
         'data.backup.json',
         '.gitignore',
         'README',
-        'file.'
+        'file.',
       ];
 
-      testFiles.forEach(fileName => {
+      testFiles.forEach((fileName) => {
         const extension = fileExtension(fileName);
         const namePart = fileNamePart(fileName);
-        
+
         if (extension && extension.length > 0) {
           // 확장자가 있는 경우 원본을 재구성할 수 있어야 함
           const reconstructed = namePart + '.' + extension;
@@ -216,7 +216,7 @@ describe('pfile - file functions', () => {
 
     test('옵션 조합의 일관성', () => {
       const testFile = 'TEST.TXT';
-      
+
       // lowerCase와 withDot 옵션이 올바르게 적용되는지 확인
       expect(fileExtension(testFile, false, false)).toBe('TXT');
       expect(fileExtension(testFile, true, false)).toBe('txt');
@@ -229,12 +229,12 @@ describe('pfile - file functions', () => {
     test('대량 파일명 처리', () => {
       const fileNames = Array.from({ length: 1000 }, (_, i) => `file${i}.txt`);
       const start = performance.now();
-      
-      fileNames.forEach(fileName => {
+
+      fileNames.forEach((fileName) => {
         fileExtension(fileName);
         fileNamePart(fileName);
       });
-      
+
       const end = performance.now();
       expect(end - start).toBeLessThan(50);
     });

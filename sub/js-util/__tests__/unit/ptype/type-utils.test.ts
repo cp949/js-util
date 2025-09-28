@@ -1,14 +1,14 @@
 import { describe, test, expect, beforeEach } from 'vitest';
-import { 
+import {
   isElement,
-  isFunction, 
+  isFunction,
   isNotNull,
   isNotNullish,
   isNotUndefined,
   isNullish,
   isNumber,
   isPlainObject,
-  isString
+  isString,
 } from '../../../src/ptype/index.js';
 
 describe('ptype 모듈', () => {
@@ -17,16 +17,16 @@ describe('ptype 모듈', () => {
       // Mock DOM element
       const mockElement = {
         nodeType: 1,
-        tagName: 'DIV'
+        tagName: 'DIV',
       };
-      
+
       expect(isElement(mockElement)).toBe(true);
     });
 
     test('nodeType이 1이 아닌 노드에 대해 false 반환', () => {
       const textNode = { nodeType: 3 }; // TEXT_NODE
       const commentNode = { nodeType: 8 }; // COMMENT_NODE
-      
+
       expect(isElement(textNode)).toBe(false);
       expect(isElement(commentNode)).toBe(false);
     });
@@ -48,10 +48,10 @@ describe('ptype 모듈', () => {
   describe('isFunction', () => {
     test('함수에 대해 true 반환', () => {
       function namedFunction() {}
-      const anonymousFunction = function() {};
+      const anonymousFunction = function () {};
       const arrowFunction = () => {};
       const asyncFunction = async () => {};
-      
+
       expect(isFunction(namedFunction)).toBe(true);
       expect(isFunction(anonymousFunction)).toBe(true);
       expect(isFunction(arrowFunction)).toBe(true);
@@ -205,7 +205,7 @@ describe('ptype 모듈', () => {
       class MyClass {}
       const instance = new MyClass();
       expect(isPlainObject(instance)).toBe(false);
-      
+
       expect(isPlainObject(new Date())).toBe(false);
       expect(isPlainObject([])).toBe(false);
       expect(isPlainObject(new RegExp('test'))).toBe(false);
@@ -228,7 +228,7 @@ describe('ptype 모듈', () => {
     });
 
     test('함수에 대해 false 반환', () => {
-      expect(isPlainObject(function() {})).toBe(false);
+      expect(isPlainObject(function () {})).toBe(false);
       expect(isPlainObject(() => {})).toBe(false);
     });
 
@@ -237,7 +237,7 @@ describe('ptype 모듈', () => {
       // 대부분의 경우 true를 반환하는데, 이는 의도된 동작임
       function CustomConstructor(this: any) {}
       CustomConstructor.prototype = Object.create(null);
-      
+
       const obj = new (CustomConstructor as any)();
       // Object.create(null)로 만든 프로토타입도 여전히 plain object로 간주됨
       expect(isPlainObject(obj)).toBe(true);
@@ -273,7 +273,7 @@ describe('ptype 모듈', () => {
   describe('타입 가드 기능 검증', () => {
     test('TypeScript 타입 가드가 올바르게 작동', () => {
       const mixedValue: unknown = 'hello';
-      
+
       if (isString(mixedValue)) {
         // 이 블록에서 mixedValue는 string 타입으로 추론되어야 함
         expect(mixedValue.length).toBe(5);
@@ -283,7 +283,7 @@ describe('ptype 모듈', () => {
 
     test('isNotNull 타입 가드 검증', () => {
       const mixedValue: string | null = Math.random() > 0.5 ? 'hello' : null;
-      
+
       if (isNotNull(mixedValue)) {
         // 이 블록에서 mixedValue는 string 타입으로 추론되어야 함
         expect(typeof mixedValue).toBe('string');
@@ -292,7 +292,7 @@ describe('ptype 모듈', () => {
 
     test('isNotNullish 타입 가드 검증', () => {
       const mixedValue: string | null | undefined = 'hello';
-      
+
       if (isNotNullish(mixedValue)) {
         // 이 블록에서 mixedValue는 string 타입으로 추론되어야 함
         expect(typeof mixedValue).toBe('string');

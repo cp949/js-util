@@ -95,7 +95,7 @@ describe('pmath - toFixed', () => {
 
     test('높은 정밀도 요구', () => {
       expect(toFixed(3.14159265359, 10)).toBe(3.1415926536);
-      expect(toFixed(1/3, 8)).toBe(0.33333333);
+      expect(toFixed(1 / 3, 8)).toBe(0.33333333);
     });
 
     test('부동소수점 정밀도 이슈', () => {
@@ -109,10 +109,10 @@ describe('pmath - toFixed', () => {
     test('반환값은 항상 number 타입', () => {
       const result1 = toFixed(3.14, 2);
       const result2 = toFixed('3.14', 2);
-      
+
       expect(typeof result1).toBe('number');
       expect(typeof result2).toBe('number');
-      
+
       // 네이티브 toFixed는 문자열을 반환하지만, 이 함수는 숫자를 반환
       expect(typeof (3.14).toFixed(2)).toBe('string');
       expect(typeof toFixed(3.14, 2)).toBe('number');
@@ -123,7 +123,7 @@ describe('pmath - toFixed', () => {
         [3.14159, 2],
         [42, 1],
         [0.123, 3],
-        [-3.14, 2]
+        [-3.14, 2],
       ] as const;
 
       testCases.forEach(([value, digits]) => {
@@ -138,11 +138,11 @@ describe('pmath - toFixed', () => {
     test('대량 연산 성능', () => {
       const iterations = 1000;
       const start = performance.now();
-      
+
       for (let i = 0; i < iterations; i++) {
         toFixed(Math.random() * 1000, 2);
       }
-      
+
       const end = performance.now();
       // 1000번 연산이 100ms 이내에 완료되어야 함
       expect(end - start).toBeLessThan(100);
@@ -153,11 +153,11 @@ describe('pmath - toFixed', () => {
     test('같은 입력에 대해 일관된 결과', () => {
       const testValue = 3.14159;
       const testDigits = 3;
-      
+
       const result1 = toFixed(testValue, testDigits);
       const result2 = toFixed(testValue, testDigits);
       const result3 = toFixed(testValue.toString(), testDigits);
-      
+
       expect(result1).toBe(result2);
       expect(result1).toBe(result3);
     });
@@ -167,7 +167,7 @@ describe('pmath - toFixed', () => {
         [42, '42'],
         [3.14, '3.14'],
         [-123.456, '-123.456'],
-        [0, '0']
+        [0, '0'],
       ];
 
       testCases.forEach(([num, str]) => {

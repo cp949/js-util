@@ -22,7 +22,7 @@ import {
   overload4,
   overload5,
   querySelector,
-  querySelectorAll
+  querySelectorAll,
 } from '../../../src/pmisc/index.js';
 
 describe('pmisc - Miscellaneous Functions', () => {
@@ -135,11 +135,11 @@ describe('pmisc - Miscellaneous Functions', () => {
     test('배열과 객체 구분', () => {
       // 빈 배열과 빈 객체는 둘 다 키가 0개이므로 deepEq에서 true 반환
       expect(deepEq([], {})).toBe(true);
-      
+
       // [1]은 배열이므로 Array.isArray() 체크를 통과하여 배열로 처리
       // { 0: 1 }은 일반 객체로 처리되어 결국 같은 값으로 인식됨
       expect(deepEq([1], { 0: 1 })).toBe(true); // 실제로는 true가 반환됨
-      
+
       // 길이가 다른 경우는 false
       expect(deepEq([1, 2], { 0: 1 })).toBe(false);
     });
@@ -221,11 +221,11 @@ describe('pmisc - Miscellaneous Functions', () => {
     const testObj = {
       a: {
         b: {
-          c: 'deep value'
-        }
+          c: 'deep value',
+        },
       },
       array: [1, 2, { nested: 'array value' }],
-      nullValue: null
+      nullValue: null,
     };
 
     test('문자열 경로로 값 접근', () => {

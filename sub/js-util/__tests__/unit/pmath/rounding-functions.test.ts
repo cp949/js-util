@@ -1,7 +1,17 @@
 import { describe, test, expect } from 'vitest';
 import {
-  roundf, roundf1, roundf2, roundf3, roundf4, roundf5,
-  roundi, roundi1, roundi2, roundi3, roundi4, roundi5
+  roundf,
+  roundf1,
+  roundf2,
+  roundf3,
+  roundf4,
+  roundf5,
+  roundi,
+  roundi1,
+  roundi2,
+  roundi3,
+  roundi4,
+  roundi5,
 } from '../../../src/pmath/round.js';
 
 describe('pmath - Rounding Functions', () => {
@@ -27,7 +37,7 @@ describe('pmath - Rounding Functions', () => {
     test('정확성 테스트', () => {
       // 부동소수점 정밀도 문제를 고려한 테스트
       // JavaScript의 부동소수점 특성상 1.005는 정확하게 표현되지 않음
-      expect(roundf(1.005, 2)).toBe(1.00); // 실제 IEEE 754 결과
+      expect(roundf(1.005, 2)).toBe(1.0); // 실제 IEEE 754 결과
       expect(roundf(2.675, 2)).toBe(2.68); // 실제 IEEE 754 결과
       expect(roundf(0.1 + 0.2, 1)).toBe(0.3);
     });
@@ -168,7 +178,7 @@ describe('pmath - Rounding Functions', () => {
       expect(roundf(Infinity, 2)).toBe(Infinity);
       expect(roundf(-Infinity, 2)).toBe(-Infinity);
       expect(isNaN(roundf(NaN, 2))).toBe(true);
-      
+
       expect(roundi(Infinity, 2)).toBe(Infinity);
       expect(roundi(-Infinity, 2)).toBe(-Infinity);
       expect(isNaN(roundi(NaN, 2))).toBe(true);
@@ -178,7 +188,7 @@ describe('pmath - Rounding Functions', () => {
   describe('성능 관련', () => {
     test('편의 함수들의 일관성', () => {
       const testValue = 3.14159265359;
-      
+
       expect(roundf1(testValue)).toBe(roundf(testValue, 1));
       expect(roundf2(testValue)).toBe(roundf(testValue, 2));
       expect(roundf3(testValue)).toBe(roundf(testValue, 3));
@@ -188,7 +198,7 @@ describe('pmath - Rounding Functions', () => {
 
     test('정수 반올림 편의 함수들의 일관성', () => {
       const testValue = 12345.67;
-      
+
       expect(roundi1(testValue)).toBe(roundi(testValue, 1));
       expect(roundi2(testValue)).toBe(roundi(testValue, 2));
       expect(roundi3(testValue)).toBe(roundi(testValue, 3));

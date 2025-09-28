@@ -3,7 +3,7 @@ export function isWebBluetoothSupport(): boolean {
     if (typeof window === 'undefined' || !window || !window.navigator) {
       return false;
     }
-    
+
     return 'bluetooth' in window.navigator;
   } catch {
     return false;

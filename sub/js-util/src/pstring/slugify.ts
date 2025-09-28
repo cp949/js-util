@@ -20,9 +20,7 @@ type SlugifyOptions = {
 };
 
 const decamelize = (string: string): string => {
-  return string
-    .replace(/([a-z\d])([A-Z])/g, '$1 $2')
-    .replace(/([A-Z]{2,})([A-Z][a-z])/g, '$1 $2');
+  return string.replace(/([a-z\d])([A-Z])/g, '$1 $2').replace(/([A-Z]{2,})([A-Z][a-z])/g, '$1 $2');
 };
 
 const removeMootSeparators = (string: string, separator: string): string => {

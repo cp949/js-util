@@ -1,10 +1,10 @@
 import { describe, test, expect } from 'vitest';
-import { 
-  joinUrl, 
-  objectToQueryString, 
-  queryParam, 
-  queryParamAsNumber, 
-  queryParams 
+import {
+  joinUrl,
+  objectToQueryString,
+  queryParam,
+  queryParamAsNumber,
+  queryParams,
 } from '../../../src/phttp/index.js';
 import queryParamAsString from '../../../src/phttp/queryParamAsString.js';
 
@@ -13,11 +13,20 @@ describe('phttp 모듈', () => {
     test('기본 URL 조합', () => {
       expect(joinUrl('http://example.com', 'path')).toBe('http://example.com/path');
       expect(joinUrl('http://example.com/', '/path')).toBe('http://example.com/path');
-      expect(joinUrl('http://example.com', '/path/', 'to', 'file')).toBe('http://example.com/path/to/file');
+      expect(joinUrl('http://example.com', '/path/', 'to', 'file')).toBe(
+        'http://example.com/path/to/file',
+      );
     });
 
     test('복잡한 URL 조합 (예제에서 가져온)', () => {
-      const fullUrl = joinUrl('http://www.google.com', 'a', '/b/cd', '?foo=123', '&bar=456', '#heading-1');
+      const fullUrl = joinUrl(
+        'http://www.google.com',
+        'a',
+        '/b/cd',
+        '?foo=123',
+        '&bar=456',
+        '#heading-1',
+      );
       expect(fullUrl).toBe('http://www.google.com/a/b/cd?foo=123&bar=456#heading-1');
     });
 
@@ -36,7 +45,9 @@ describe('phttp 모듈', () => {
     test('배열 인자 처리', () => {
       expect(joinUrl('http://example.com', ['a', 'b', 'c'])).toBe('http://example.com/a/b/c');
       expect(joinUrl('http://example.com', ['a', undefined, 'c'])).toBe('http://example.com/a/c');
-      expect(joinUrl(['http://example.com', 'path', 'to', 'file'])).toBe('http://example.com/path/to/file');
+      expect(joinUrl(['http://example.com', 'path', 'to', 'file'])).toBe(
+        'http://example.com/path/to/file',
+      );
     });
 
     test('점(.) 경로 처리', () => {
@@ -45,19 +56,33 @@ describe('phttp 모듈', () => {
     });
 
     test('슬래시 정규화', () => {
-      expect(joinUrl('http://example.com///', '///path///', '///to///', '///file')).toBe('http://example.com/path/to/file');
-      expect(joinUrl('http://example.com', 'path/', '/to/', '/file/')).toBe('http://example.com/path/to/file/');
+      expect(joinUrl('http://example.com///', '///path///', '///to///', '///file')).toBe(
+        'http://example.com/path/to/file',
+      );
+      expect(joinUrl('http://example.com', 'path/', '/to/', '/file/')).toBe(
+        'http://example.com/path/to/file/',
+      );
     });
 
     test('쿼리 파라미터와 해시', () => {
-      expect(joinUrl('http://example.com', 'path', '?param=value')).toBe('http://example.com/path?param=value');
-      expect(joinUrl('http://example.com', 'path', '#section')).toBe('http://example.com/path#section');
-      expect(joinUrl('http://example.com', 'path', '?param=value', '#section')).toBe('http://example.com/path?param=value#section');
+      expect(joinUrl('http://example.com', 'path', '?param=value')).toBe(
+        'http://example.com/path?param=value',
+      );
+      expect(joinUrl('http://example.com', 'path', '#section')).toBe(
+        'http://example.com/path#section',
+      );
+      expect(joinUrl('http://example.com', 'path', '?param=value', '#section')).toBe(
+        'http://example.com/path?param=value#section',
+      );
     });
 
     test('여러 쿼리 파라미터 조합', () => {
-      expect(joinUrl('http://example.com', 'path', '?a=1', '?b=2', '&c=3')).toBe('http://example.com/path?a=1&b=2&c=3');
-      expect(joinUrl('http://example.com', 'path', '?a=1', '&b=2', '?c=3')).toBe('http://example.com/path?a=1&b=2&c=3');
+      expect(joinUrl('http://example.com', 'path', '?a=1', '?b=2', '&c=3')).toBe(
+        'http://example.com/path?a=1&b=2&c=3',
+      );
+      expect(joinUrl('http://example.com', 'path', '?a=1', '&b=2', '?c=3')).toBe(
+        'http://example.com/path?a=1&b=2&c=3',
+      );
     });
 
     test('IPv6 주소 처리', () => {
@@ -92,7 +117,9 @@ describe('phttp 모듈', () => {
     test('빈 값 처리', () => {
       expect(objectToQueryString({ name: 'john', empty: '', age: 30 })).toBe('?name=john&age=30');
       expect(objectToQueryString({ name: 'john', nil: null, age: 30 })).toBe('?name=john&age=30');
-      expect(objectToQueryString({ name: 'john', undef: undefined, age: 30 })).toBe('?name=john&age=30');
+      expect(objectToQueryString({ name: 'john', undef: undefined, age: 30 })).toBe(
+        '?name=john&age=30',
+      );
     });
 
     test('숫자와 불린 값', () => {
@@ -112,7 +139,9 @@ describe('phttp 모듈', () => {
     });
 
     test('복합 데이터 타입', () => {
-      expect(objectToQueryString({ arr: [1, 2, 3], obj: { nested: 'value' } })).toBe('?arr=1,2,3&obj=[object Object]');
+      expect(objectToQueryString({ arr: [1, 2, 3], obj: { nested: 'value' } })).toBe(
+        '?arr=1,2,3&obj=[object Object]',
+      );
     });
   });
 

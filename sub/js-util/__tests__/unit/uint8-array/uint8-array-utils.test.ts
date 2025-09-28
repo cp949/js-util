@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach } from 'vitest';
-import { 
+import {
   isUint8Array,
   assertUint8Array,
   toUint8Array,
@@ -15,7 +15,7 @@ import {
   uint8ArrayToHex,
   hexToUint8Array,
   indexOf,
-  includes
+  includes,
 } from '../../../src/uint8-array/index.js';
 
 describe('uint8-array 모듈', () => {
@@ -72,7 +72,7 @@ describe('uint8-array 모듈', () => {
       const buffer = new ArrayBuffer(4);
       const view = new DataView(buffer);
       view.setUint32(0, 0x12345678);
-      
+
       const result = toUint8Array(buffer);
       expect(isUint8Array(result)).toBe(true);
       expect(result.length).toBe(4);
@@ -81,7 +81,7 @@ describe('uint8-array 모듈', () => {
     test('다른 TypedArray를 Uint8Array로 변환', () => {
       const int16Array = new Int16Array([256, 512]); // 2 bytes each
       const result = toUint8Array(int16Array);
-      
+
       expect(isUint8Array(result)).toBe(true);
       expect(result.length).toBe(4); // 2 elements × 2 bytes each
     });
@@ -89,7 +89,7 @@ describe('uint8-array 모듈', () => {
     test('DataView를 Uint8Array로 변환', () => {
       const buffer = new ArrayBuffer(8);
       const dataView = new DataView(buffer, 2, 4); // offset=2, length=4
-      
+
       const result = toUint8Array(dataView);
       expect(isUint8Array(result)).toBe(true);
       expect(result.length).toBe(4);
@@ -107,7 +107,7 @@ describe('uint8-array 모듈', () => {
       const a = new Uint8Array([1, 2]);
       const b = new Uint8Array([3, 4]);
       const c = new Uint8Array([5, 6]);
-      
+
       const result = concatUint8Arrays([a, b, c]);
       expect(result).toEqual(new Uint8Array([1, 2, 3, 4, 5, 6]));
     });
@@ -126,7 +126,7 @@ describe('uint8-array 모듈', () => {
     test('totalLength 매개변수 사용', () => {
       const a = new Uint8Array([1, 2]);
       const b = new Uint8Array([3, 4]);
-      
+
       const result = concatUint8Arrays([a, b], 4);
       expect(result.length).toBe(4);
       expect(result).toEqual(new Uint8Array([1, 2, 3, 4]));
@@ -249,7 +249,7 @@ describe('uint8-array 모듈', () => {
       const base64 = uint8ArrayToBase64(original, { urlSafe: true });
       expect(base64).not.toContain('+');
       expect(base64).not.toContain('/');
-      
+
       const recovered = base64ToUint8Array(base64);
       expect(areUint8ArraysEqual(original, recovered)).toBe(true);
     });
@@ -265,7 +265,7 @@ describe('uint8-array 모듈', () => {
       const text = 'Hello, World!';
       const base64 = stringToBase64(text, { urlSafe: true });
       expect(typeof base64).toBe('string');
-      
+
       const recovered = base64ToString(base64);
       expect(recovered).toBe(text);
     });
@@ -283,7 +283,7 @@ describe('uint8-array 모듈', () => {
       const original = new Uint8Array([0, 15, 255, 128]);
       const hex = uint8ArrayToHex(original);
       expect(hex).toBe('000fff80');
-      
+
       const recovered = hexToUint8Array(hex);
       expect(areUint8ArraysEqual(original, recovered)).toBe(true);
     });
@@ -291,10 +291,10 @@ describe('uint8-array 모듈', () => {
     test('대소문자 구분 없는 Hex 디코딩', () => {
       const lowerCase = 'deadbeef';
       const upperCase = 'DEADBEEF';
-      
+
       const fromLower = hexToUint8Array(lowerCase);
       const fromUpper = hexToUint8Array(upperCase);
-      
+
       expect(areUint8ArraysEqual(fromLower, fromUpper)).toBe(true);
     });
 
@@ -302,7 +302,7 @@ describe('uint8-array 모듈', () => {
       const empty = new Uint8Array();
       const hex = uint8ArrayToHex(empty);
       expect(hex).toBe('');
-      
+
       const recovered = hexToUint8Array(hex);
       expect(areUint8ArraysEqual(empty, recovered)).toBe(true);
     });
@@ -317,21 +317,21 @@ describe('uint8-array 모듈', () => {
     test('indexOf - 패턴을 찾을 수 있는 경우', () => {
       const array = new Uint8Array([1, 2, 3, 4, 5, 6]);
       const pattern = new Uint8Array([3, 4]);
-      
+
       expect(indexOf(array, pattern)).toBe(2);
     });
 
     test('indexOf - 패턴을 찾을 수 없는 경우', () => {
       const array = new Uint8Array([1, 2, 3, 4, 5, 6]);
       const pattern = new Uint8Array([7, 8]);
-      
+
       expect(indexOf(array, pattern)).toBe(-1);
     });
 
     test('indexOf - 빈 패턴', () => {
       const array = new Uint8Array([1, 2, 3]);
       const pattern = new Uint8Array();
-      
+
       // 실제 구현에서는 빈 패턴에 대해 -1을 반환함
       expect(indexOf(array, pattern)).toBe(-1);
     });
@@ -339,28 +339,28 @@ describe('uint8-array 모듈', () => {
     test('indexOf - 배열보다 긴 패턴', () => {
       const array = new Uint8Array([1, 2]);
       const pattern = new Uint8Array([1, 2, 3]);
-      
+
       expect(indexOf(array, pattern)).toBe(-1);
     });
 
     test('includes - 패턴이 포함된 경우', () => {
       const array = new Uint8Array([1, 2, 3, 4, 5]);
       const pattern = new Uint8Array([2, 3, 4]);
-      
+
       expect(includes(array, pattern)).toBe(true);
     });
 
     test('includes - 패턴이 포함되지 않은 경우', () => {
       const array = new Uint8Array([1, 2, 3, 4, 5]);
       const pattern = new Uint8Array([6, 7]);
-      
+
       expect(includes(array, pattern)).toBe(false);
     });
 
     test('includes - 완전히 동일한 배열', () => {
       const array = new Uint8Array([1, 2, 3]);
       const pattern = new Uint8Array([1, 2, 3]);
-      
+
       expect(includes(array, pattern)).toBe(true);
     });
   });
@@ -377,7 +377,7 @@ describe('uint8-array 모듈', () => {
       for (let i = 0; i < size; i++) {
         large[i] = i % 256;
       }
-      
+
       expect(isUint8Array(large)).toBe(true);
       expect(large.length).toBe(size);
     });
@@ -385,7 +385,7 @@ describe('uint8-array 모듈', () => {
     test('0 값들로만 이루어진 배열', () => {
       const zeros = new Uint8Array(100);
       expect(isUint8Array(zeros)).toBe(true);
-      expect(zeros.every(v => v === 0)).toBe(true);
+      expect(zeros.every((v) => v === 0)).toBe(true);
     });
   });
 });

@@ -1,9 +1,5 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest';
-import { 
-  downloadBlob,
-  downloadLink, 
-  downloadText
-} from '../../../src/pweb/index.js';
+import { downloadBlob, downloadLink, downloadText } from '../../../src/pweb/index.js';
 
 // Mock 타입 정의
 interface MockWindow {
@@ -44,7 +40,7 @@ describe('pweb 모듈', () => {
       body: {
         appendChild: vi.fn(),
         removeChild: vi.fn(),
-      }
+      },
     };
 
     // Mock window
@@ -63,7 +59,7 @@ describe('pweb 모듈', () => {
     vi.stubGlobal('window', mockWindow);
     vi.stubGlobal('URL', mockURL);
     vi.stubGlobal('HTMLAnchorElement', {
-      prototype: { download: true }
+      prototype: { download: true },
     });
 
     // Reset console.warn mock
@@ -93,11 +89,11 @@ describe('pweb 모듈', () => {
     test('다운로드 속성을 지원하지 않는 브라우저에서 새 창으로 열기', () => {
       // HTMLAnchorElement에서 download 속성 제거
       vi.stubGlobal('HTMLAnchorElement', {
-        prototype: {}
+        prototype: {},
       });
 
       const mockPopup = {
-        location: { href: '' }
+        location: { href: '' },
       };
       mockWindow.open.mockReturnValue(mockPopup);
 
@@ -115,7 +111,7 @@ describe('pweb 모듈', () => {
     test('새 창 열기가 실패하는 경우 경고 출력', () => {
       // HTMLAnchorElement에서 download 속성 제거
       vi.stubGlobal('HTMLAnchorElement', {
-        prototype: {}
+        prototype: {},
       });
 
       mockWindow.open.mockReturnValue(null); // 팝업 차단
@@ -181,11 +177,11 @@ describe('pweb 모듈', () => {
     test('다운로드 속성을 지원하지 않는 브라우저에서 새 창으로 열기', () => {
       // HTMLAnchorElement에서 download 속성 제거
       vi.stubGlobal('HTMLAnchorElement', {
-        prototype: {}
+        prototype: {},
       });
 
       const mockPopup = {
-        location: { href: '' }
+        location: { href: '' },
       };
       mockWindow.open.mockReturnValue(mockPopup);
 
@@ -200,7 +196,7 @@ describe('pweb 모듈', () => {
     test('새 창 열기가 실패하는 경우 경고 출력', () => {
       // HTMLAnchorElement에서 download 속성 제거
       vi.stubGlobal('HTMLAnchorElement', {
-        prototype: {}
+        prototype: {},
       });
 
       mockWindow.open.mockReturnValue(null); // 팝업 차단

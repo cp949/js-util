@@ -114,7 +114,7 @@ export class EventEmitter<EventTypes extends ValidEventTypes = string | symbol, 
 
     const listeners = this._events[evt];
     if (!listeners) return false;
-    
+
     let hasError = false;
     let lastError: Error | undefined;
 

@@ -2,7 +2,7 @@ import { createTypeGuard } from '../utils.js';
 
 /**
  * Checks if the value is an Event object.
- * 
+ *
  * @category Type Guard
  * @example
  *
@@ -17,9 +17,7 @@ import { createTypeGuard } from '../utils.js';
  * ```
  */
 export function isEvent(input: unknown): input is Event {
-  return createTypeGuard<Event>(
-    (value) => 
-      typeof Event !== 'undefined' && 
-      value instanceof Event
-  )(input);
+  return createTypeGuard<Event>((value) => typeof Event !== 'undefined' && value instanceof Event)(
+    input,
+  );
 }

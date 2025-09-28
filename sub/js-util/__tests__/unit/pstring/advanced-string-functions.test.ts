@@ -12,7 +12,9 @@ describe('pstring - Advanced String Functions', () => {
   describe('encodeUrl', () => {
     test('should preserve already encoded URLs', () => {
       expect(encodeUrl('http://[::1]:8080/foo/bar')).toBe('http://[::1]:8080/foo/bar');
-      expect(encodeUrl('http:\\\\localhost\\foo\\bar.html')).toBe('http:\\\\localhost\\foo\\bar.html');
+      expect(encodeUrl('http:\\\\localhost\\foo\\bar.html')).toBe(
+        'http:\\\\localhost\\foo\\bar.html',
+      );
     });
 
     test('should encode special characters', () => {
@@ -21,13 +23,15 @@ describe('pstring - Advanced String Functions', () => {
     });
 
     test('should encode control characters', () => {
-      expect(encodeUrl('/\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f'))
-        .toBe('/%00%01%02%03%04%05%06%07%08%09%0A%0B%0C%0D%0E%0F');
+      expect(encodeUrl('/\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f')).toBe(
+        '/%00%01%02%03%04%05%06%07%08%09%0A%0B%0C%0D%0E%0F',
+      );
     });
 
     test('should preserve valid characters', () => {
-      expect(encodeUrl('/\x60\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6a\x6b\x6c\x6d\x6e\x6f'))
-        .toBe('/%60abcdefghijklmno');
+      expect(encodeUrl('/\x60\x61\x62\x63\x64\x65\x66\x67\x68\x69\x6a\x6b\x6c\x6d\x6e\x6f')).toBe(
+        '/%60abcdefghijklmno',
+      );
     });
 
     test('should preserve valid percent encoding', () => {
@@ -35,18 +39,21 @@ describe('pstring - Advanced String Functions', () => {
     });
 
     test('should encode invalid percent sequences', () => {
-      expect(encodeUrl('http://localhost/%foo%bar%zap%'))
-        .toBe('http://localhost/%25foo%bar%25zap%25');
+      expect(encodeUrl('http://localhost/%foo%bar%zap%')).toBe(
+        'http://localhost/%25foo%bar%25zap%25',
+      );
     });
 
     test('should handle Unicode characters', () => {
-      expect(encodeUrl('http://localhost/\uD83D\uDC7B snow.html'))
-        .toBe('http://localhost/%F0%9F%91%BB%20snow.html');
+      expect(encodeUrl('http://localhost/\uD83D\uDC7B snow.html')).toBe(
+        'http://localhost/%F0%9F%91%BB%20snow.html',
+      );
     });
 
     test('should handle unpaired surrogate characters', () => {
-      expect(encodeUrl('http://localhost/\uD83Dfoo\uDC7B <\uDC7B\uD83D>.html'))
-        .toBe('http://localhost/%EF%BF%BDfoo%EF%BF%BD%20%3C%EF%BF%BD%EF%BF%BD%3E.html');
+      expect(encodeUrl('http://localhost/\uD83Dfoo\uDC7B <\uDC7B\uD83D>.html')).toBe(
+        'http://localhost/%EF%BF%BDfoo%EF%BF%BD%20%3C%EF%BF%BD%EF%BF%BD%3E.html',
+      );
     });
 
     test('should handle empty and edge cases', () => {
@@ -65,8 +72,9 @@ describe('pstring - Advanced String Functions', () => {
     });
 
     test('should escape all XML characters together', () => {
-      expect(escapeXml('<tag attr="value" attr2=\'value2\'>&content;</tag>'))
-        .toBe('&lt;tag attr=&quot;value&quot; attr2=&apos;value2&apos;&gt;&amp;content;&lt;/tag&gt;');
+      expect(escapeXml('<tag attr="value" attr2=\'value2\'>&content;</tag>')).toBe(
+        '&lt;tag attr=&quot;value&quot; attr2=&apos;value2&apos;&gt;&amp;content;&lt;/tag&gt;',
+      );
     });
 
     test('should handle empty and normal text', () => {
@@ -76,7 +84,9 @@ describe('pstring - Advanced String Functions', () => {
     });
 
     test('should handle mixed content', () => {
-      expect(escapeXml('Hello & "World" <test>')).toBe('Hello &amp; &quot;World&quot; &lt;test&gt;');
+      expect(escapeXml('Hello & "World" <test>')).toBe(
+        'Hello &amp; &quot;World&quot; &lt;test&gt;',
+      );
     });
   });
 
@@ -302,7 +312,9 @@ Another line with margin`;
     });
 
     test('should encode special characters', () => {
-      expect(sanitizeHref('example.com/path with spaces')).toBe('http://example.com/path%20with%20spaces');
+      expect(sanitizeHref('example.com/path with spaces')).toBe(
+        'http://example.com/path%20with%20spaces',
+      );
       expect(sanitizeHref('test.com/한글')).toContain('http://test.com/');
     });
   });

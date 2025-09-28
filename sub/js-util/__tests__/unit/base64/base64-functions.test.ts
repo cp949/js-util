@@ -5,7 +5,7 @@ import {
   base64ToUint8Array,
   uint8ArrayToBase64,
   encode,
-  decode
+  decode,
 } from '../../../src/base64/index.js';
 
 describe('base64 - Base64 Encoding/Decoding Functions', () => {
@@ -13,7 +13,7 @@ describe('base64 - Base64 Encoding/Decoding Functions', () => {
   const testString = 'Hello World!';
   const expectedBase64 = 'SGVsbG8gV29ybGQh';
   const testBytes = new Uint8Array([72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33]);
-  
+
   // Complex test data
   const complexString = 'Hello 한글 世界 🌍 测试';
   const binaryData = new Uint8Array([0, 1, 127, 128, 255, 254, 100, 200]);
@@ -127,15 +127,15 @@ describe('base64 - Base64 Encoding/Decoding Functions', () => {
 
     test('다양한 크기의 ArrayBuffer 변환', () => {
       const sizes = [1, 2, 4, 8, 16, 32, 64, 128];
-      
-      sizes.forEach(size => {
+
+      sizes.forEach((size) => {
         const buffer = new ArrayBuffer(size);
         const view = new Uint8Array(buffer);
         // Fill with sequential values
         for (let i = 0; i < size; i++) {
           view[i] = i % 256;
         }
-        
+
         const result = arrayBufferToBase64(buffer);
         expect(typeof result).toBe('string');
         expect(result.length).toBeGreaterThan(0);
@@ -168,11 +168,11 @@ describe('base64 - Base64 Encoding/Decoding Functions', () => {
       for (let i = 0; i < 10; i++) {
         originalView[i] = (i * 12) % 128;
       }
-      
+
       const base64 = arrayBufferToBase64(originalBuffer);
       const restoredBuffer = base64ToArrayBuffer(base64);
       const restoredView = new Uint8Array(restoredBuffer);
-      
+
       expect(restoredView).toEqual(originalView);
     });
   });
@@ -180,18 +180,18 @@ describe('base64 - Base64 Encoding/Decoding Functions', () => {
   describe('통합 변환 테스트', () => {
     test('모든 타입 간 변환 일관성', () => {
       const originalString = 'Integration test data';
-      
+
       // String → base64 → back to string
       const base64FromString = encode(originalString);
       const stringFromBase64 = decode(base64FromString);
       expect(stringFromBase64).toBe(originalString);
-      
+
       // Uint8Array → base64 → back to Uint8Array
       const uint8Array = new Uint8Array(Buffer.from(originalString, 'utf8'));
       const base64FromUint8 = uint8ArrayToBase64(uint8Array);
       const uint8FromBase64 = base64ToUint8Array(base64FromUint8);
       expect(uint8FromBase64).toEqual(uint8Array);
-      
+
       // ArrayBuffer → base64 → back to ArrayBuffer
       const arrayBuffer = uint8Array.buffer;
       const base64FromBuffer = arrayBufferToBase64(arrayBuffer);
@@ -205,30 +205,30 @@ describe('base64 - Base64 Encoding/Decoding Functions', () => {
       for (let i = 0; i < 128; i++) {
         binaryData[i] = i;
       }
-      
+
       const base64 = uint8ArrayToBase64(binaryData);
       const restored = base64ToUint8Array(base64);
-      
+
       expect(restored).toEqual(binaryData);
     });
 
     test('크기가 다른 데이터의 패딩 처리', () => {
       const sizes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-      
-      sizes.forEach(size => {
+
+      sizes.forEach((size) => {
         const data = new Uint8Array(size);
         for (let i = 0; i < size; i++) {
           data[i] = (i * 17) % 128; // ASCII 범위 내로 제한
         }
-        
+
         const base64 = uint8ArrayToBase64(data);
         const restored = base64ToUint8Array(base64);
-        
+
         expect(restored).toEqual(data);
-        
+
         // Base64 문자열의 길이는 항상 4의 배수여야 함
         expect(base64.length % 4).toBe(0);
-        
+
         // 패딩 문자 '='는 끝에만 나타나야 함
         if (base64.includes('=')) {
           const paddingIndex = base64.indexOf('=');
@@ -244,10 +244,10 @@ describe('base64 - Base64 Encoding/Decoding Functions', () => {
       // 실제 Node.js 환경에서는 Buffer를 사용하고, 브라우저에서는 btoa를 사용
       const testString = 'Hello World!';
       const result = encode(testString);
-      
+
       // 결과는 동일해야 함 (브라우저 환경에서 실행되므로 btoa 사용)
       expect(result).toBe('SGVsbG8gV29ybGQh');
-      
+
       // 타입 체크: encode 함수는 항상 문자열을 반환해야 함
       expect(typeof result).toBe('string');
     });
@@ -257,10 +257,10 @@ describe('base64 - Base64 Encoding/Decoding Functions', () => {
       // 실제 Node.js 환경에서는 Buffer를 사용하고, 브라우저에서는 atob를 사용
       const testBase64 = 'SGVsbG8gV29ybGQh';
       const result = decode(testBase64);
-      
+
       // 결과는 동일해야 함 (브라우저 환경에서 실행되므로 atob 사용)
       expect(result).toBe('Hello World!');
-      
+
       // 타입 체크: decode 함수는 항상 문자열을 반환해야 함
       expect(typeof result).toBe('string');
     });
@@ -277,10 +277,10 @@ describe('base64 - Base64 Encoding/Decoding Functions', () => {
     test('null/undefined 입력 처리', () => {
       // encode 함수는 null을 문자열로 변환하여 처리하므로 에러를 던지지 않음
       expect(encode(null as any)).toBeDefined();
-      
+
       // decode 함수도 null을 문자열로 변환하여 처리하므로 에러를 던지지 않음
       expect(decode(null as any)).toBeDefined();
-      
+
       expect(() => {
         uint8ArrayToBase64(null as any);
       }).toThrow();

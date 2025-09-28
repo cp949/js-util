@@ -1,11 +1,23 @@
 import { describe, test, expect } from 'vitest';
 import {
-  circIn, circOut, circInOut,
-  elasticIn, elasticOut, elasticInOut,
-  expoIn, expoOut, expoInOut,
-  quartIn, quartOut, quartInOut,
-  quintIn, quintOut, quintInOut,
-  sineIn, sineOut, sineInOut
+  circIn,
+  circOut,
+  circInOut,
+  elasticIn,
+  elasticOut,
+  elasticInOut,
+  expoIn,
+  expoOut,
+  expoInOut,
+  quartIn,
+  quartOut,
+  quartInOut,
+  quintIn,
+  quintOut,
+  quintInOut,
+  sineIn,
+  sineOut,
+  sineInOut,
 } from '../../../src/easing/index.js';
 
 describe('easing - Additional Easing Functions', () => {
@@ -271,7 +283,7 @@ describe('easing - Additional Easing Functions', () => {
       expect(sineIn(0.5)).toBeCloseTo(1 - Math.cos(Math.PI / 4), 6);
 
       // sineInOut의 특정 값들 - sineInOut(x) = -(cos(π*x) - 1) / 2
-      expect(sineInOut(0.25)).toBeCloseTo(-(Math.cos(Math.PI * 0.25) - 1) / 2, 6); 
+      expect(sineInOut(0.25)).toBeCloseTo(-(Math.cos(Math.PI * 0.25) - 1) / 2, 6);
       expect(sineInOut(0.75)).toBeCloseTo(-(Math.cos(Math.PI * 0.75) - 1) / 2, 6);
     });
   });
@@ -295,7 +307,7 @@ describe('easing - Additional Easing Functions', () => {
       { name: 'quintInOut', fn: quintInOut },
       { name: 'sineIn', fn: sineIn },
       { name: 'sineOut', fn: sineOut },
-      { name: 'sineInOut', fn: sineInOut }
+      { name: 'sineInOut', fn: sineInOut },
     ];
 
     test('모든 함수가 숫자를 반환', () => {
@@ -315,7 +327,7 @@ describe('easing - Additional Easing Functions', () => {
 
     test('InOut 함수들의 중점 대칭성', () => {
       const inOutFunctions = newEasingFunctions.filter(({ name }) => name.endsWith('InOut'));
-      
+
       inOutFunctions.forEach(({ name, fn }) => {
         expect(fn(0.5), `${name}(0.5) should be 0.5`).toBeCloseTo(0.5, 6);
       });
@@ -323,12 +335,16 @@ describe('easing - Additional Easing Functions', () => {
 
     test('함수의 단조성 (일부 구간에서)', () => {
       // In 함수들은 단조증가
-      const inFunctions = newEasingFunctions.filter(({ name }) => name.endsWith('In') && !name.includes('elastic'));
-      
+      const inFunctions = newEasingFunctions.filter(
+        ({ name }) => name.endsWith('In') && !name.includes('elastic'),
+      );
+
       inFunctions.forEach(({ name, fn }) => {
         const values = [0, 0.25, 0.5, 0.75, 1].map(fn);
         for (let i = 1; i < values.length; i++) {
-          expect(values[i], `${name} should be monotonic increasing`).toBeGreaterThanOrEqual(values[i-1]);
+          expect(values[i], `${name} should be monotonic increasing`).toBeGreaterThanOrEqual(
+            values[i - 1],
+          );
         }
       });
     });
@@ -336,7 +352,7 @@ describe('easing - Additional Easing Functions', () => {
     test('극값 처리', () => {
       newEasingFunctions.forEach(({ name, fn }) => {
         expect(isNaN(fn(NaN)), `${name} should handle NaN`).toBe(true);
-        
+
         const positiveInf = fn(Infinity);
         const negativeInf = fn(-Infinity);
         expect(typeof positiveInf, `${name} should handle +Infinity`).toBe('number');

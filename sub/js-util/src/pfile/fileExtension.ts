@@ -7,10 +7,10 @@
  */
 export function fileExtension(fileName: string, lowerCase = false, withDot = false): string | null {
   if (fileName.indexOf('.') < 0) return null;
-  
+
   // 단일 점은 특별 케이스 - 확장자 없음
   if (fileName === '.') return null;
-  
+
   let ext = fileName.split('.').pop();
   if (lowerCase) {
     ext = ext?.toLowerCase();

@@ -56,12 +56,12 @@ function normalize(strArray: string[]): string {
 
   for (let i = 0; i < strArray.length; i++) {
     const part = strArray[i];
-    
+
     if (i === 0 && (part.includes('://') || part.match(/^[^/:]+:\/*$/))) {
       // Handle the first URL part (protocol + host + existing path/query)
       const [beforeQuery, afterQuery] = part.split(/[?#]/);
       const [baseUrl, ...existingQueryParts] = part.split('?');
-      
+
       if (part.includes('?') || part.includes('#')) {
         // URL has existing query or hash
         urlParts.push(baseUrl);
@@ -95,7 +95,7 @@ function normalize(strArray: string[]): string {
   // Add base URL
   if (urlParts.length > 0) {
     let baseUrl = urlParts[0];
-    
+
     // Handle protocol normalization
     if (baseUrl.match(/^[^/:]+:\/*$/) && pathParts.length > 0) {
       baseUrl = baseUrl + pathParts.shift();
@@ -118,7 +118,7 @@ function normalize(strArray: string[]): string {
   for (let i = 0; i < pathParts.length; i++) {
     const pathPart = pathParts[i];
     let cleanPath = pathPart;
-    
+
     if (i === 0 && result === '' && pathPart.startsWith('/')) {
       // First part and it's an absolute path
       if (pathPart === '/') {
@@ -142,7 +142,7 @@ function normalize(strArray: string[]): string {
         }
       }
     }
-    
+
     if (cleanPath && cleanPath !== '.') {
       if (result && !result.endsWith('/') && !cleanPath.startsWith('/')) {
         result += '/';
@@ -156,8 +156,8 @@ function normalize(strArray: string[]): string {
     const cleanQueryParts = queryParts
       .join('&')
       .split(/[&?]+/)
-      .filter(part => part.length > 0);
-    
+      .filter((part) => part.length > 0);
+
     if (cleanQueryParts.length > 0) {
       result += '?' + cleanQueryParts.join('&');
     }

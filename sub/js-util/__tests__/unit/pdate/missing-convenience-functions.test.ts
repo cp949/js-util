@@ -7,9 +7,9 @@ describe('pdate - Missing Convenience Functions', () => {
       // 2024-01-01 00:00:00 UTC
       const epochSeconds = 1704067200;
       const fmtString = 'YYYY-MM-DD HH:mm:ss';
-      
+
       const [formattedStr, date] = formatByEpochSeconds(epochSeconds, fmtString);
-      
+
       expect(formattedStr).toBeDefined();
       expect(date).toBeInstanceOf(Date);
       expect(formattedStr).toMatch(/2024-01-01/);
@@ -20,7 +20,7 @@ describe('pdate - Missing Convenience Functions', () => {
 
     test('Unix epoch (0)', () => {
       const [formattedStr, date] = formatByEpochSeconds(0, 'YYYY-MM-DD');
-      
+
       expect(formattedStr).toBe('1970-01-01');
       expect(date).toBeInstanceOf(Date);
       expect(date!.toISOString()).toBe('1970-01-01T00:00:00.000Z');
@@ -29,7 +29,7 @@ describe('pdate - Missing Convenience Functions', () => {
     test('음수 timestamp (1970년 이전)', () => {
       const epochSeconds = -86400; // 1969-12-31 00:00:00 UTC
       const [formattedStr, date] = formatByEpochSeconds(epochSeconds, 'YYYY-MM-DD');
-      
+
       expect(formattedStr).toBe('1969-12-31');
       expect(date).toBeInstanceOf(Date);
       expect(date!.getFullYear()).toBe(1969);
@@ -40,7 +40,7 @@ describe('pdate - Missing Convenience Functions', () => {
     test('소수점이 있는 timestamp (밀리초 포함)', () => {
       const epochSeconds = 1704067200.5; // 0.5초 추가
       const [formattedStr, date] = formatByEpochSeconds(epochSeconds, 'YYYY-MM-DD HH:mm:ss.SSS');
-      
+
       expect(formattedStr).toBeDefined();
       expect(date).toBeInstanceOf(Date);
       expect(date!.getMilliseconds()).toBe(500);
@@ -49,19 +49,19 @@ describe('pdate - Missing Convenience Functions', () => {
 
     test('다양한 포맷 문자열', () => {
       const epochSeconds = 1703509845; // 2023-12-25 06:30:45 UTC
-      
+
       const formats = [
         'YYYY-MM-DD',
         'DD/MM/YYYY',
         'MMMM Do YYYY',
         'HH:mm:ss',
         'dddd, MMMM Do YYYY, h:mm:ss a',
-        'X' // Unix timestamp
+        'X', // Unix timestamp
       ];
 
-      formats.forEach(format => {
+      formats.forEach((format) => {
         const [formattedStr, date] = formatByEpochSeconds(epochSeconds, format);
-        
+
         expect(formattedStr).toBeDefined();
         expect(typeof formattedStr).toBe('string');
         expect(date).toBeInstanceOf(Date);
@@ -70,10 +70,10 @@ describe('pdate - Missing Convenience Functions', () => {
 
     test('잘못된 epoch seconds (null/undefined)', () => {
       const testCases = [null as any, undefined as any];
-      
-      testCases.forEach(invalidValue => {
+
+      testCases.forEach((invalidValue) => {
         const [formattedStr, date] = formatByEpochSeconds(invalidValue, 'YYYY-MM-DD');
-        
+
         expect(formattedStr).toBeUndefined();
         expect(date).toBeUndefined();
       });
@@ -82,26 +82,23 @@ describe('pdate - Missing Convenience Functions', () => {
     test('극단적인 timestamp 값들', () => {
       const validValues = [
         2147483647, // 32-bit timestamp limit (2038 problem)
-        -2147483648 // 32-bit negative limit
+        -2147483648, // 32-bit negative limit
       ];
 
-      validValues.forEach(timestamp => {
+      validValues.forEach((timestamp) => {
         const [formattedStr, date] = formatByEpochSeconds(timestamp, 'YYYY');
-        
+
         expect(formattedStr).toBeDefined();
         expect(date).toBeInstanceOf(Date);
         expect(isNaN(date!.getTime())).toBe(false);
       });
 
       // 너무 극단적인 값들은 undefined를 반환할 수 있음
-      const extremeValues = [
-        Number.MAX_SAFE_INTEGER,
-        Number.MIN_SAFE_INTEGER
-      ];
+      const extremeValues = [Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER];
 
-      extremeValues.forEach(timestamp => {
+      extremeValues.forEach((timestamp) => {
         const [formattedStr, date] = formatByEpochSeconds(timestamp, 'YYYY');
-        
+
         // 극단적인 값들은 Invalid Date 객체를 반환할 수 있음
         if (formattedStr === undefined) {
           expect(date).toBeInstanceOf(Date);
@@ -114,10 +111,10 @@ describe('pdate - Missing Convenience Functions', () => {
 
     test('반환값 구조 확인', () => {
       const result = formatByEpochSeconds(1704067200, 'YYYY-MM-DD');
-      
+
       expect(Array.isArray(result)).toBe(true);
       expect(result).toHaveLength(2);
-      
+
       const [formattedStr, date] = result;
       expect(typeof formattedStr).toBe('string');
       expect(date).toBeInstanceOf(Date);
@@ -125,7 +122,7 @@ describe('pdate - Missing Convenience Functions', () => {
 
     test('빈 포맷 문자열', () => {
       const [formattedStr, date] = formatByEpochSeconds(1704067200, '');
-      
+
       expect(formattedStr).toBeDefined();
       expect(date).toBeInstanceOf(Date);
       // dayjs는 빈 포맷 문자열에 대해 기본 형식을 사용할 수 있음
@@ -133,7 +130,7 @@ describe('pdate - Missing Convenience Functions', () => {
 
     test('잘못된 포맷 문자열', () => {
       const [formattedStr, date] = formatByEpochSeconds(1704067200, 'INVALID_FORMAT');
-      
+
       expect(formattedStr).toBeDefined(); // dayjs는 잘못된 포맷을 그대로 출력할 수 있음
       expect(date).toBeInstanceOf(Date);
     });
@@ -144,9 +141,9 @@ describe('pdate - Missing Convenience Functions', () => {
       // 2024-01-01 00:00:00.000 UTC
       const epochMillis = 1704067200000;
       const fmtString = 'YYYY-MM-DD HH:mm:ss.SSS';
-      
+
       const [formattedStr, date] = formatByEpochMillis(epochMillis, fmtString);
-      
+
       expect(formattedStr).toBeDefined();
       expect(date).toBeInstanceOf(Date);
       expect(formattedStr).toMatch(/2024-01-01.*000/);
@@ -159,7 +156,7 @@ describe('pdate - Missing Convenience Functions', () => {
     test('밀리초 정밀도 테스트', () => {
       const epochMillis = 1704067200123; // 123 밀리초 추가
       const [formattedStr, date] = formatByEpochMillis(epochMillis, 'YYYY-MM-DD HH:mm:ss.SSS');
-      
+
       expect(formattedStr).toBeDefined();
       expect(date).toBeInstanceOf(Date);
       expect(date!.getMilliseconds()).toBe(123);
@@ -168,7 +165,7 @@ describe('pdate - Missing Convenience Functions', () => {
 
     test('Unix epoch in milliseconds (0)', () => {
       const [formattedStr, date] = formatByEpochMillis(0, 'YYYY-MM-DD HH:mm:ss');
-      
+
       // 로컬 시간대에 따라 09:00:00이 될 수 있음 (UTC+9)
       expect(formattedStr).toMatch(/1970-01-01 \d{2}:00:00/);
       expect(date).toBeInstanceOf(Date);
@@ -178,7 +175,7 @@ describe('pdate - Missing Convenience Functions', () => {
     test('음수 timestamp in milliseconds', () => {
       const epochMillis = -86400000; // 1969-12-31 00:00:00 UTC
       const [formattedStr, date] = formatByEpochMillis(epochMillis, 'YYYY-MM-DD');
-      
+
       expect(formattedStr).toBe('1969-12-31');
       expect(date).toBeInstanceOf(Date);
       expect(date!.getFullYear()).toBe(1969);
@@ -190,7 +187,7 @@ describe('pdate - Missing Convenience Functions', () => {
       // 2023-12-25 15:30:45.678 UTC 근사치
       const epochMillis = 1703509845678;
       const [formattedStr, date] = formatByEpochMillis(epochMillis, 'YYYY-MM-DD HH:mm:ss.SSS');
-      
+
       expect(formattedStr).toBeDefined();
       expect(date).toBeInstanceOf(Date);
       expect(date!.getFullYear()).toBe(2023);
@@ -199,17 +196,17 @@ describe('pdate - Missing Convenience Functions', () => {
 
     test('다양한 포맷 문자열', () => {
       const epochMillis = 1703509845000; // 밀리초로 변환
-      
+
       const formats = [
         'YYYY-MM-DD',
         'DD/MM/YYYY HH:mm:ss',
         'MMMM Do YYYY, h:mm:ss.SSS a',
-        'x' // Unix millisecond timestamp
+        'x', // Unix millisecond timestamp
       ];
 
-      formats.forEach(format => {
+      formats.forEach((format) => {
         const [formattedStr, date] = formatByEpochMillis(epochMillis, format);
-        
+
         expect(formattedStr).toBeDefined();
         expect(typeof formattedStr).toBe('string');
         expect(date).toBeInstanceOf(Date);
@@ -218,10 +215,10 @@ describe('pdate - Missing Convenience Functions', () => {
 
     test('잘못된 epoch milliseconds (null/undefined)', () => {
       const testCases = [null as any, undefined as any];
-      
-      testCases.forEach(invalidValue => {
+
+      testCases.forEach((invalidValue) => {
         const [formattedStr, date] = formatByEpochMillis(invalidValue, 'YYYY-MM-DD');
-        
+
         // null/undefined는 Invalid Date 객체를 반환할 수 있음
         if (formattedStr === undefined) {
           expect(date).toBeInstanceOf(Date);
@@ -237,12 +234,12 @@ describe('pdate - Missing Convenience Functions', () => {
         8640000000000000, // Date의 최대값
         -8640000000000000, // Date의 최소값
         2147483647000, // 32-bit second limit * 1000
-        -2147483648000 // 32-bit negative second limit * 1000
+        -2147483648000, // 32-bit negative second limit * 1000
       ];
 
-      extremeValues.forEach(timestamp => {
+      extremeValues.forEach((timestamp) => {
         const [formattedStr, date] = formatByEpochMillis(timestamp, 'YYYY');
-        
+
         if (Math.abs(timestamp) <= 8640000000000000) {
           // 유효한 Date 범위 내
           expect(formattedStr).toBeDefined();
@@ -258,10 +255,10 @@ describe('pdate - Missing Convenience Functions', () => {
 
     test('반환값 구조 확인', () => {
       const result = formatByEpochMillis(1704067200000, 'YYYY-MM-DD');
-      
+
       expect(Array.isArray(result)).toBe(true);
       expect(result).toHaveLength(2);
-      
+
       const [formattedStr, date] = result;
       expect(typeof formattedStr).toBe('string');
       expect(date).toBeInstanceOf(Date);
@@ -298,7 +295,7 @@ describe('pdate - Missing Convenience Functions', () => {
     test('부동소수점 정밀도 처리', () => {
       const epochSeconds = 1704067200.123; // 123ms
       const epochMillis = 1704067200123;
-      
+
       const [secResult, secDate] = formatByEpochSeconds(epochSeconds, 'SSS');
       const [milliResult, milliDate] = formatByEpochMillis(epochMillis, 'SSS');
 
@@ -315,7 +312,7 @@ describe('pdate - Missing Convenience Functions', () => {
       // NaN은 Invalid Date를 생성함
       expect(date1).toBeInstanceOf(Date);
       expect(date2).toBeInstanceOf(Date);
-      
+
       // NaN으로 생성된 Date는 Invalid Date가 됨
       expect(isNaN(date1!.getTime())).toBe(true);
       expect(isNaN(date2!.getTime())).toBe(true);
@@ -324,7 +321,7 @@ describe('pdate - Missing Convenience Functions', () => {
     test('Infinity 입력 처리', () => {
       const infinityValues = [Infinity, -Infinity];
 
-      infinityValues.forEach(value => {
+      infinityValues.forEach((value) => {
         const [secResult, secDate] = formatByEpochSeconds(value, 'YYYY');
         const [milliResult, milliDate] = formatByEpochMillis(value, 'YYYY');
 
@@ -345,17 +342,11 @@ describe('pdate - Missing Convenience Functions', () => {
 
     test('빈 문자열 및 특수 문자가 포함된 포맷', () => {
       const epochSeconds = 1704067200;
-      const specialFormats = [
-        '',
-        '   ',
-        '\\n\\t',
-        '[YYYY] MM-DD',
-        'YYYY년 MM월 DD일'
-      ];
+      const specialFormats = ['', '   ', '\\n\\t', '[YYYY] MM-DD', 'YYYY년 MM월 DD일'];
 
-      specialFormats.forEach(format => {
+      specialFormats.forEach((format) => {
         const [formattedStr, date] = formatByEpochSeconds(epochSeconds, format);
-        
+
         expect(formattedStr).toBeDefined();
         expect(date).toBeInstanceOf(Date);
       });
@@ -384,7 +375,7 @@ describe('pdate - Missing Convenience Functions', () => {
       // formatByEpochSeconds는 null/undefined에 대해 undefined를 반환함
       expect(result1[0]).toBeUndefined();
       expect(result1[1]).toBeUndefined();
-      
+
       // formatByEpochMillis도 undefined에 대해 Invalid Date를 반환함
       expect(result2[1]).toBeInstanceOf(Date);
       if (result2[0] === undefined) {

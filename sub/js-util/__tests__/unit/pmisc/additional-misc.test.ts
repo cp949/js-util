@@ -187,7 +187,7 @@ describe('pmisc - Additional Functions', () => {
 
     test.skipIf(typeof window === 'undefined')('정적 메서드 - createWindowListener', () => {
       const mockListener = vi.fn();
-      
+
       const closables = Closables.createWindowListener('resize', mockListener);
       expect(closables.count).toBe(1);
 
@@ -197,7 +197,7 @@ describe('pmisc - Additional Functions', () => {
 
     test.skipIf(typeof document === 'undefined')('정적 메서드 - createDocumentListener', () => {
       const mockListener = vi.fn();
-      
+
       const closables = Closables.createDocumentListener('click', mockListener);
       expect(closables.count).toBe(1);
 
@@ -208,7 +208,7 @@ describe('pmisc - Additional Functions', () => {
     test.skipIf(typeof document === 'undefined')('정적 메서드 - createElementListener', () => {
       const mockElement = document.createElement('div');
       const mockListener = vi.fn();
-      
+
       const closables = Closables.createElementListener(mockElement, 'click', mockListener);
       expect(closables.count).toBe(1);
 
@@ -218,7 +218,7 @@ describe('pmisc - Additional Functions', () => {
 
     test('정적 메서드 - createRx', () => {
       const mockSubscription = { unsubscribe: vi.fn() };
-      
+
       const closables = Closables.createRx(mockSubscription);
       expect(closables.count).toBe(1);
 
@@ -228,7 +228,7 @@ describe('pmisc - Additional Functions', () => {
 
     test('정적 메서드 - createClose', () => {
       const mockClosable = { close: vi.fn() };
-      
+
       const closables = Closables.createClose(mockClosable);
       expect(closables.count).toBe(1);
 
@@ -238,7 +238,7 @@ describe('pmisc - Additional Functions', () => {
 
     test('정적 메서드 - createTerminate', () => {
       const mockTerminable = { terminate: vi.fn() };
-      
+
       const closables = Closables.createTerminate(mockTerminable);
       expect(closables.count).toBe(1);
 
@@ -248,7 +248,7 @@ describe('pmisc - Additional Functions', () => {
 
     test('정적 메서드 - createShutdown', () => {
       const mockShutdownable = { shutdown: vi.fn() };
-      
+
       const closables = Closables.createShutdown(mockShutdownable);
       expect(closables.count).toBe(1);
 
@@ -258,7 +258,7 @@ describe('pmisc - Additional Functions', () => {
 
     test('정적 메서드 - createDestroy', () => {
       const mockDestroyable = { destroy: vi.fn() };
-      
+
       const closables = Closables.createDestroy(mockDestroyable);
       expect(closables.count).toBe(1);
 
@@ -268,7 +268,7 @@ describe('pmisc - Additional Functions', () => {
 
     test('정적 메서드 - createDispose', () => {
       const mockDisposable = { dispose: vi.fn() };
-      
+
       const closables = Closables.createDispose(mockDisposable);
       expect(closables.count).toBe(1);
 
@@ -282,10 +282,7 @@ describe('pmisc - Additional Functions', () => {
       const mockSubscription = { unsubscribe: vi.fn() };
       const mockClosable = { close: vi.fn() };
 
-      const result = closables
-        .add(mockFn)
-        .addRx(mockSubscription)
-        .addClose(mockClosable);
+      const result = closables.add(mockFn).addRx(mockSubscription).addClose(mockClosable);
 
       expect(result).toBe(closables); // 체이닝 확인
       expect(closables.count).toBe(3);

@@ -110,7 +110,7 @@ describe('pfile 모듈', () => {
     test('빈 문자열과 점만 있는 경우', () => {
       expect(fileNamePart('')).toBe('');
       expect(fileNamePart('.')).toBe('.'); // dotIdx === 0이므로 전체 반환
-      expect(fileNamePart('..')).toBe('.');  // 마지막 점의 위치가 1
+      expect(fileNamePart('..')).toBe('.'); // 마지막 점의 위치가 1
     });
 
     test('특수 문자가 포함된 파일명', () => {

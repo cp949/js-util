@@ -7,28 +7,46 @@ describe('phttp - HTTP utility functions', () => {
   describe('joinUrl', () => {
     test('기본 URL 조인', () => {
       expect(joinUrl('http://example.com', 'api', 'users')).toBe('http://example.com/api/users');
-      expect(joinUrl('https://api.github.com', 'repos', 'owner', 'repo')).toBe('https://api.github.com/repos/owner/repo');
+      expect(joinUrl('https://api.github.com', 'repos', 'owner', 'repo')).toBe(
+        'https://api.github.com/repos/owner/repo',
+      );
     });
 
     test('슬래시 정규화', () => {
-      expect(joinUrl('http://example.com/', '/api/', '/users/')).toBe('http://example.com/api/users/');
-      expect(joinUrl('http://example.com///', '///api///', '///users')).toBe('http://example.com/api/users');
+      expect(joinUrl('http://example.com/', '/api/', '/users/')).toBe(
+        'http://example.com/api/users/',
+      );
+      expect(joinUrl('http://example.com///', '///api///', '///users')).toBe(
+        'http://example.com/api/users',
+      );
     });
 
     test('빈 문자열 및 undefined 필터링', () => {
-      expect(joinUrl('http://example.com', '', 'api', undefined, 'users')).toBe('http://example.com/api/users');
+      expect(joinUrl('http://example.com', '', 'api', undefined, 'users')).toBe(
+        'http://example.com/api/users',
+      );
       expect(joinUrl('http://example.com', null as any, 'api')).toBe('http://example.com/api');
     });
 
     test('쿼리 파라미터와 해시', () => {
-      expect(joinUrl('http://example.com', 'api', '?foo=123', '&bar=456')).toBe('http://example.com/api?foo=123&bar=456');
-      expect(joinUrl('http://example.com', 'page', '#section')).toBe('http://example.com/page#section');
-      expect(joinUrl('http://example.com', 'api', '?foo=123', '#section')).toBe('http://example.com/api?foo=123#section');
+      expect(joinUrl('http://example.com', 'api', '?foo=123', '&bar=456')).toBe(
+        'http://example.com/api?foo=123&bar=456',
+      );
+      expect(joinUrl('http://example.com', 'page', '#section')).toBe(
+        'http://example.com/page#section',
+      );
+      expect(joinUrl('http://example.com', 'api', '?foo=123', '#section')).toBe(
+        'http://example.com/api?foo=123#section',
+      );
     });
 
     test('복잡한 쿼리 파라미터', () => {
-      expect(joinUrl('http://example.com', 'search', '?q=test', '&sort=date', '&filter=all')).toBe('http://example.com/search?q=test&sort=date&filter=all');
-      expect(joinUrl('http://example.com?existing=param', 'api', '?new=param')).toBe('http://example.com/api?existing=param&new=param');
+      expect(joinUrl('http://example.com', 'search', '?q=test', '&sort=date', '&filter=all')).toBe(
+        'http://example.com/search?q=test&sort=date&filter=all',
+      );
+      expect(joinUrl('http://example.com?existing=param', 'api', '?new=param')).toBe(
+        'http://example.com/api?existing=param&new=param',
+      );
     });
 
     test('프로토콜 처리', () => {
@@ -48,12 +66,18 @@ describe('phttp - HTTP utility functions', () => {
     });
 
     test('배열 인자 지원', () => {
-      expect(joinUrl('http://example.com', ['api', 'v1'], 'users')).toBe('http://example.com/api/v1/users');
-      expect(joinUrl(['http://example.com', 'api'], ['users', '123'])).toBe('http://example.com/api/users/123');
+      expect(joinUrl('http://example.com', ['api', 'v1'], 'users')).toBe(
+        'http://example.com/api/v1/users',
+      );
+      expect(joinUrl(['http://example.com', 'api'], ['users', '123'])).toBe(
+        'http://example.com/api/users/123',
+      );
     });
 
     test('점(.) 필터링', () => {
-      expect(joinUrl('http://example.com', '.', 'api', '.', 'users')).toBe('http://example.com/api/users');
+      expect(joinUrl('http://example.com', '.', 'api', '.', 'users')).toBe(
+        'http://example.com/api/users',
+      );
     });
 
     test('빈 인자 처리', () => {
@@ -68,8 +92,12 @@ describe('phttp - HTTP utility functions', () => {
     });
 
     test('특수 문자가 포함된 경로', () => {
-      expect(joinUrl('http://example.com', 'path with spaces', 'file.txt')).toBe('http://example.com/path with spaces/file.txt');
-      expect(joinUrl('http://example.com', 'path-with-dashes', 'file_name.txt')).toBe('http://example.com/path-with-dashes/file_name.txt');
+      expect(joinUrl('http://example.com', 'path with spaces', 'file.txt')).toBe(
+        'http://example.com/path with spaces/file.txt',
+      );
+      expect(joinUrl('http://example.com', 'path-with-dashes', 'file_name.txt')).toBe(
+        'http://example.com/path-with-dashes/file_name.txt',
+      );
     });
   });
 
@@ -84,8 +112,9 @@ describe('phttp - HTTP utility functions', () => {
     });
 
     test('falsy 값 필터링', () => {
-      expect(objectToQueryString({ foo: 'bar', empty: '', nullValue: null, undefinedValue: undefined }))
-        .toBe('?foo=bar');
+      expect(
+        objectToQueryString({ foo: 'bar', empty: '', nullValue: null, undefinedValue: undefined }),
+      ).toBe('?foo=bar');
       expect(objectToQueryString({ zero: 0, false: false, emptyString: '' })).toBe('');
     });
 
@@ -99,8 +128,12 @@ describe('phttp - HTTP utility functions', () => {
     });
 
     test('특수 문자 포함', () => {
-      expect(objectToQueryString({ 'special-key': 'value with spaces', 'another_key': 'value&with&ampersands' }))
-        .toBe('?special-key=value with spaces&another_key=value&with&ampersands');
+      expect(
+        objectToQueryString({
+          'special-key': 'value with spaces',
+          another_key: 'value&with&ampersands',
+        }),
+      ).toBe('?special-key=value with spaces&another_key=value&with&ampersands');
     });
 
     test('단일 키-값', () => {
@@ -113,8 +146,9 @@ describe('phttp - HTTP utility functions', () => {
     });
 
     test('중첩된 값들 (문자열화)', () => {
-      expect(objectToQueryString({ arr: [1, 2, 3].toString(), obj: JSON.stringify({ a: 1 }) }))
-        .toBe('?arr=1,2,3&obj={"a":1}');
+      expect(
+        objectToQueryString({ arr: [1, 2, 3].toString(), obj: JSON.stringify({ a: 1 }) }),
+      ).toBe('?arr=1,2,3&obj={"a":1}');
     });
   });
 
@@ -186,21 +220,21 @@ describe('phttp - HTTP utility functions', () => {
       const baseUrl = 'http://api.example.com';
       const path = 'users/123';
       const params = { include: 'profile', format: 'json' };
-      
+
       const url = joinUrl(baseUrl, path);
       const queryString = objectToQueryString(params);
       const fullUrl = url + queryString;
-      
+
       expect(fullUrl).toBe('http://api.example.com/users/123?include=profile&format=json');
     });
 
     test('URL 재구성 가능성', () => {
       const originalParts = ['http://example.com', 'api', 'v1', 'users'];
       const joined = joinUrl(...originalParts);
-      
+
       // URL을 다시 파싱할 수 있어야 함
       expect(joined).toMatch(/^http:\/\/example\.com\/api\/v1\/users$/);
-      
+
       const url = new URL(joined);
       expect(url.protocol).toBe('http:');
       expect(url.hostname).toBe('example.com');
@@ -211,27 +245,27 @@ describe('phttp - HTTP utility functions', () => {
   describe('성능 테스트', () => {
     test('joinUrl 대량 처리', () => {
       const start = performance.now();
-      
+
       for (let i = 0; i < 1000; i++) {
         joinUrl('http://example.com', 'api', `resource${i}`, `${i}`);
       }
-      
+
       const end = performance.now();
       expect(end - start).toBeLessThan(100);
     });
 
     test('objectToQueryString 대량 처리', () => {
       const start = performance.now();
-      
+
       for (let i = 0; i < 1000; i++) {
-        objectToQueryString({ 
-          id: i, 
-          name: `name${i}`, 
+        objectToQueryString({
+          id: i,
+          name: `name${i}`,
           active: i % 2 === 0,
-          count: i * 10
+          count: i * 10,
         });
       }
-      
+
       const end = performance.now();
       expect(end - start).toBeLessThan(50);
     });

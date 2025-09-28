@@ -191,12 +191,12 @@ describe('pstring - basic functions', () => {
   describe('일관성 테스트', () => {
     test('capitalize와 uncapitalize는 서로 역함수', () => {
       const testStrings = ['hello', 'World', 'tEST', 'a'];
-      
-      testStrings.forEach(str => {
+
+      testStrings.forEach((str) => {
         if (str.length > 0) {
           const capitalized = capitalize(uncapitalize(str));
           const uncapitalized = uncapitalize(capitalize(str));
-          
+
           expect(capitalized.charAt(0)).toBe(str.charAt(0).toUpperCase());
           expect(uncapitalized.charAt(0)).toBe(str.charAt(0).toLowerCase());
         }
@@ -205,16 +205,16 @@ describe('pstring - basic functions', () => {
 
     test('isEmpty와 isNotEmpty는 서로 반대', () => {
       const testCases = ['', 'hello', null, undefined, ' ', '0'];
-      
-      testCases.forEach(testCase => {
+
+      testCases.forEach((testCase) => {
         expect(isEmpty(testCase)).toBe(!isNotEmpty(testCase));
       });
     });
 
     test('isBlank와 isNotBlank는 서로 반대', () => {
       const testCases = ['', 'hello', null, undefined, '   ', '\t\n', ' a '];
-      
-      testCases.forEach(testCase => {
+
+      testCases.forEach((testCase) => {
         expect(isBlank(testCase)).toBe(!isNotBlank(testCase));
       });
     });

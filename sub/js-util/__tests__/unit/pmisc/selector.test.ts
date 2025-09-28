@@ -9,19 +9,16 @@ const mockElement = {
     return null;
   },
   querySelectorAll: (selector: string) => {
-    if (selector === '.multiple') return [
-      { id: 'element1' },
-      { id: 'element2' },
-      { id: 'element3' }
-    ];
+    if (selector === '.multiple')
+      return [{ id: 'element1' }, { id: 'element2' }, { id: 'element3' }];
     if (selector === '.single') return [{ id: 'single-element' }];
     return [];
-  }
+  },
 } as any;
 
 const mockDocument = {
   querySelector: mockElement.querySelector,
-  querySelectorAll: mockElement.querySelectorAll
+  querySelectorAll: mockElement.querySelectorAll,
 } as any;
 
 const mockXPathEvaluator = {
@@ -33,9 +30,9 @@ const mockXPathEvaluator = {
           return index === 0 ? { tagName: 'DIV', id: 'div1' } : { tagName: 'DIV', id: 'div2' };
         }
         return null;
-      }
-    })
-  })
+      },
+    }),
+  }),
 };
 
 describe('pmisc - Selector Functions', () => {
@@ -78,11 +75,7 @@ describe('pmisc - Selector Functions', () => {
   describe('querySelectorAll', () => {
     test('should find multiple elements', () => {
       const result = querySelectorAll('.multiple');
-      expect(result).toEqual([
-        { id: 'element1' },
-        { id: 'element2' },
-        { id: 'element3' }
-      ]);
+      expect(result).toEqual([{ id: 'element1' }, { id: 'element2' }, { id: 'element3' }]);
     });
 
     test('should find single element as array', () => {
@@ -97,11 +90,7 @@ describe('pmisc - Selector Functions', () => {
 
     test('should work with custom root', () => {
       const result = querySelectorAll('.multiple', mockElement);
-      expect(result).toEqual([
-        { id: 'element1' },
-        { id: 'element2' },
-        { id: 'element3' }
-      ]);
+      expect(result).toEqual([{ id: 'element1' }, { id: 'element2' }, { id: 'element3' }]);
     });
   });
 
@@ -110,7 +99,7 @@ describe('pmisc - Selector Functions', () => {
       const result = xpathSelector('//div');
       expect(result).toEqual([
         { tagName: 'DIV', id: 'div1' },
-        { tagName: 'DIV', id: 'div2' }
+        { tagName: 'DIV', id: 'div2' },
       ]);
     });
 
@@ -123,7 +112,7 @@ describe('pmisc - Selector Functions', () => {
       const result = xpathSelector('//div', mockElement);
       expect(result).toEqual([
         { tagName: 'DIV', id: 'div1' },
-        { tagName: 'DIV', id: 'div2' }
+        { tagName: 'DIV', id: 'div2' },
       ]);
     });
 

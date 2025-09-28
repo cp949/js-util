@@ -65,7 +65,9 @@ export function createTypeAssertion<T, O extends TypeAssertionOptions | undefine
  * );
  * ```
  */
-export function isUnion<T>(...guards: ((input: unknown, ...args: any[]) => input is T)[]): (input: unknown, ...args: any[]) => input is T {
+export function isUnion<T>(
+  ...guards: ((input: unknown, ...args: any[]) => input is T)[]
+): (input: unknown, ...args: any[]) => input is T {
   return function (input: unknown, ...args: any[]): input is T {
     for (const guard of guards) {
       if (guard(input, ...args)) {

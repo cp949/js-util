@@ -27,9 +27,11 @@
 export const encodeStringToBase64 = (sourceString: string): string => {
   try {
     // 유니코드 문자를 포함한 문자열도 처리할 수 있도록 encodeURIComponent 사용
-    return window.btoa(encodeURIComponent(sourceString).replace(/%([0-9A-F]{2})/g, (match, p1) => {
-      return String.fromCharCode(parseInt(p1, 16));
-    }));
+    return window.btoa(
+      encodeURIComponent(sourceString).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+        return String.fromCharCode(parseInt(p1, 16));
+      }),
+    );
   } catch (e) {
     // Fallback: 직접 btoa 호출 (ASCII 전용)
     return window.btoa(sourceString);

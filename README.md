@@ -220,18 +220,21 @@ npm publish --access public
 ### 코드 기여
 
 1. **Fork & Clone**
+
    ```bash
    git clone <your-fork-url>
    cd js-util
    ```
 
 2. **환경 설정**
+
    ```bash
    pnpm install
    pnpm dev  # 개발 서버 시작으로 환경 확인
    ```
 
 3. **기능 개발**
+
    ```bash
    git checkout -b feature/amazing-feature
    # 코드 작성

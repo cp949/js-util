@@ -20,59 +20,62 @@ import {
   uniq,
   $uniq,
   uniqBy,
-  zipWith
+  zipWith,
 } from '../../../src/parray/index.js';
 
 describe('parray - Extended Operations', () => {
   describe('associateBy', () => {
     const data = [
-      { id: 1, category: "fruit", name: "apple", price: 100 },
-      { id: 2, category: "fruit", name: "banana", price: 200 },
-      { id: 3, category: "vegetable", name: "carrot", price: 300 },
+      { id: 1, category: 'fruit', name: 'apple', price: 100 },
+      { id: 2, category: 'fruit', name: 'banana', price: 200 },
+      { id: 3, category: 'vegetable', name: 'carrot', price: 300 },
     ];
 
     test('기본 사용 (객체 전체 저장)', () => {
-      const result = associateBy(data, "id");
+      const result = associateBy(data, 'id');
       expect(result).toEqual({
-        1: { id: 1, category: "fruit", name: "apple", price: 100 },
-        2: { id: 2, category: "fruit", name: "banana", price: 200 },
-        3: { id: 3, category: "vegetable", name: "carrot", price: 300 }
+        1: { id: 1, category: 'fruit', name: 'apple', price: 100 },
+        2: { id: 2, category: 'fruit', name: 'banana', price: 200 },
+        3: { id: 3, category: 'vegetable', name: 'carrot', price: 300 },
       });
     });
 
     test('특정 속성 값만 저장', () => {
-      const result = associateBy(data, "id", "name");
+      const result = associateBy(data, 'id', 'name');
       expect(result).toEqual({
-        1: "apple",
-        2: "banana",
-        3: "carrot"
+        1: 'apple',
+        2: 'banana',
+        3: 'carrot',
       });
     });
 
     test('변환 함수를 적용하여 저장', () => {
-      const result = associateBy(data, "id", (item) => `${item.name} (${item.price}원)`);
+      const result = associateBy(data, 'id', (item) => `${item.name} (${item.price}원)`);
       expect(result).toEqual({
-        1: "apple (100원)",
-        2: "banana (200원)",
-        3: "carrot (300원)"
+        1: 'apple (100원)',
+        2: 'banana (200원)',
+        3: 'carrot (300원)',
       });
     });
 
     test('같은 키가 여러 개 있을 경우 마지막 값 저장', () => {
       const duplicateData = [
-        { id: 1, name: "first" },
-        { id: 1, name: "second" },
-        { id: 1, name: "last" }
+        { id: 1, name: 'first' },
+        { id: 1, name: 'second' },
+        { id: 1, name: 'last' },
       ];
-      const result = associateBy(duplicateData, "id", "name");
-      expect(result).toEqual({ 1: "last" });
+      const result = associateBy(duplicateData, 'id', 'name');
+      expect(result).toEqual({ 1: 'last' });
     });
   });
 
   describe('chunks', () => {
     test('배열을 지정된 크기로 분할', () => {
       expect(chunks([1, 2, 3, 4, 5], 2)).toEqual([[1, 2], [3, 4], [5]]);
-      expect(chunks([1, 2, 3, 4, 5, 6], 3)).toEqual([[1, 2, 3], [4, 5, 6]]);
+      expect(chunks([1, 2, 3, 4, 5, 6], 3)).toEqual([
+        [1, 2, 3],
+        [4, 5, 6],
+      ]);
     });
 
     test('크기가 배열보다 클 때', () => {
@@ -90,42 +93,40 @@ describe('parray - Extended Operations', () => {
 
   describe('groupBy', () => {
     const data = [
-      { category: "fruit", name: "apple", price: 100 },
-      { category: "fruit", name: "banana", price: 200 },
-      { category: "vegetable", name: "carrot", price: 300 }
+      { category: 'fruit', name: 'apple', price: 100 },
+      { category: 'fruit', name: 'banana', price: 200 },
+      { category: 'vegetable', name: 'carrot', price: 300 },
     ];
 
     test('기본 그룹화 (객체 전체)', () => {
-      const result = groupBy(data, "category");
+      const result = groupBy(data, 'category');
       expect(result).toEqual({
-        "fruit": [
-          { category: "fruit", name: "apple", price: 100 },
-          { category: "fruit", name: "banana", price: 200 }
+        fruit: [
+          { category: 'fruit', name: 'apple', price: 100 },
+          { category: 'fruit', name: 'banana', price: 200 },
         ],
-        "vegetable": [
-          { category: "vegetable", name: "carrot", price: 300 }
-        ]
+        vegetable: [{ category: 'vegetable', name: 'carrot', price: 300 }],
       });
     });
 
     test('특정 속성만 선택하여 그룹화', () => {
-      const result = groupBy(data, "category", "price");
+      const result = groupBy(data, 'category', 'price');
       expect(result).toEqual({
-        "fruit": [100, 200],
-        "vegetable": [300]
+        fruit: [100, 200],
+        vegetable: [300],
       });
     });
 
     test('변환 함수를 적용하여 그룹화', () => {
-      const result = groupBy(data, "category", item => item.name.toUpperCase());
+      const result = groupBy(data, 'category', (item) => item.name.toUpperCase());
       expect(result).toEqual({
-        "fruit": ["APPLE", "BANANA"],
-        "vegetable": ["CARROT"]
+        fruit: ['APPLE', 'BANANA'],
+        vegetable: ['CARROT'],
       });
     });
 
     test('빈 배열', () => {
-      expect(groupBy([], "category")).toEqual({});
+      expect(groupBy([], 'category')).toEqual({});
     });
   });
 
@@ -145,7 +146,7 @@ describe('parray - Extended Operations', () => {
     test('배열이 아닌 값들에 대해 false', () => {
       expect(isArrayEqual([1, 2, 3], null)).toBe(false);
       expect(isArrayEqual(null, [1, 2, 3])).toBe(false);
-      expect(isArrayEqual("string", [1, 2, 3])).toBe(false);
+      expect(isArrayEqual('string', [1, 2, 3])).toBe(false);
     });
 
     test('falsy 값들 포함', () => {
@@ -158,7 +159,7 @@ describe('parray - Extended Operations', () => {
     test('배열 항목 이동 (원본 변경)', () => {
       const arr = [1, 2, 3, 4, 5];
       const result = move(arr, 1, 3);
-      
+
       expect(result).toBe(arr); // 원본 배열 반환
       expect(result).toEqual([1, 3, 4, 2, 5]); // 2가 인덱스 3으로 이동
     });
@@ -186,9 +187,9 @@ describe('parray - Extended Operations', () => {
     test('불변 배열 항목 이동', () => {
       const arr = [1, 2, 3, 4, 5];
       const result = $move(arr, 1, 3);
-      
+
       expect(result).not.toBe(arr); // 새로운 배열
-      expect(result).toEqual([1, 3, 4, 2, 5]); 
+      expect(result).toEqual([1, 3, 4, 2, 5]);
       expect(arr).toEqual([1, 2, 3, 4, 5]); // 원본 유지
     });
   });
@@ -203,25 +204,25 @@ describe('parray - Extended Operations', () => {
   describe('pluck', () => {
     test('객체 배열에서 특정 속성 추출', () => {
       const data = [
-        { id: 1, name: "apple", price: 100 },
-        { id: 2, name: "banana", price: 200 },
-        { id: 3, name: "carrot", price: 300 }
+        { id: 1, name: 'apple', price: 100 },
+        { id: 2, name: 'banana', price: 200 },
+        { id: 3, name: 'carrot', price: 300 },
       ];
-      expect(pluck(data, "name")).toEqual(["apple", "banana", "carrot"]);
-      expect(pluck(data, "price")).toEqual([100, 200, 300]);
+      expect(pluck(data, 'name')).toEqual(['apple', 'banana', 'carrot']);
+      expect(pluck(data, 'price')).toEqual([100, 200, 300]);
     });
 
     test('빈 배열', () => {
-      expect(pluck([], "name")).toEqual([]);
+      expect(pluck([], 'name')).toEqual([]);
     });
 
     test('다양한 타입의 속성', () => {
       const data = [
         { active: true, count: 0 },
-        { active: false, count: 5 }
+        { active: false, count: 5 },
       ];
-      expect(pluck(data, "active")).toEqual([true, false]);
-      expect(pluck(data, "count")).toEqual([0, 5]);
+      expect(pluck(data, 'active')).toEqual([true, false]);
+      expect(pluck(data, 'count')).toEqual([0, 5]);
     });
   });
 
@@ -229,7 +230,7 @@ describe('parray - Extended Operations', () => {
     test('배열 앞에 요소 추가 (원본 변경)', () => {
       const arr = [2, 3];
       const result = prepend(arr, [1, 0]);
-      
+
       expect(result).toBe(arr); // 원본 배열 반환
       expect(result).toEqual([1, 0, 2, 3]);
     });
@@ -247,11 +248,18 @@ describe('parray - Extended Operations', () => {
     });
 
     test('함수 기준 중복 제거', () => {
-      const arr = [{ id: 2, name: "b" }];
-      prepend(arr, [{ id: 1, name: "a" }, { id: 2, name: "duplicate" }], x => x.id);
+      const arr = [{ id: 2, name: 'b' }];
+      prepend(
+        arr,
+        [
+          { id: 1, name: 'a' },
+          { id: 2, name: 'duplicate' },
+        ],
+        (x) => x.id,
+      );
       expect(arr).toHaveLength(2);
-      expect(arr[0]).toEqual({ id: 1, name: "a" }); 
-      expect(arr[1]).toEqual({ id: 2, name: "b" }); // 기존 것 유지
+      expect(arr[0]).toEqual({ id: 1, name: 'a' });
+      expect(arr[1]).toEqual({ id: 2, name: 'b' }); // 기존 것 유지
     });
 
     test('빈 배열 추가', () => {
@@ -265,7 +273,7 @@ describe('parray - Extended Operations', () => {
     test('불변 배열 앞에 요소 추가', () => {
       const arr = [2, 3];
       const result = $prepend(arr, [1, 0]);
-      
+
       expect(result).not.toBe(arr); // 새로운 배열
       expect(result).toEqual([1, 0, 2, 3]);
       expect(arr).toEqual([2, 3]); // 원본 유지
@@ -274,7 +282,7 @@ describe('parray - Extended Operations', () => {
     test('중복 제거와 불변성', () => {
       const arr = [2, 3];
       const result = $prepend(arr, [1, 2], true);
-      
+
       expect(result).not.toBe(arr);
       expect(result).toEqual([1, 2, 3]);
       expect(arr).toEqual([2, 3]); // 원본 유지
@@ -327,7 +335,7 @@ describe('parray - Extended Operations', () => {
     test('중복 제거 (원본 변경)', () => {
       const arr = [1, 2, 2, 3, 1, 4];
       const result = uniq(arr);
-      
+
       expect(result).toBe(arr); // 원본 배열 반환
       expect(result).toEqual([1, 2, 3, 4]);
     });
@@ -360,7 +368,7 @@ describe('parray - Extended Operations', () => {
     test('불변 중복 제거', () => {
       const arr = [1, 2, 2, 3, 1, 4];
       const result = $uniq(arr);
-      
+
       expect(result).not.toBe(arr); // 새로운 배열
       expect(result).toEqual([1, 2, 3, 4]);
       expect(arr).toEqual([1, 2, 2, 3, 1, 4]); // 원본 유지

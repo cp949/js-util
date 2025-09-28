@@ -11,7 +11,7 @@ import {
   isFloat32Array,
   isFloat64Array,
   isBigInt64Array,
-  isBigUint64Array
+  isBigUint64Array,
 } from '../../../src/types/guards/isTypedArray.js';
 
 describe('types - Typed Array Guards', () => {

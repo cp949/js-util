@@ -25,7 +25,8 @@ export function isArraySorted<T>(
 ): boolean {
   // NaN이나 null/undefined가 있으면 정렬되지 않은 것으로 판단
   for (const item of array) {
-    if (item !== item || item === null || item === undefined) { // NaN check: NaN !== NaN
+    if (item !== item || item === null || item === undefined) {
+      // NaN check: NaN !== NaN
       return false;
     }
   }
@@ -39,6 +40,6 @@ export function isArraySorted<T>(
       return false;
     }
   }
-  
+
   return true;
 }

@@ -23,17 +23,17 @@ describe('types - Additional Type Guards', () => {
 
     test('undefined 값', () => {
       expect(isDefined(undefined)).toBe(false);
-      
+
       let undefinedVar: any;
       expect(isDefined(undefinedVar)).toBe(false);
-      
+
       const obj: any = {};
       expect(isDefined(obj.nonExistentProperty)).toBe(false);
     });
 
     test('타입 가드 기능', () => {
       const mixedValue: string | undefined = Math.random() > 0.5 ? 'hello' : undefined;
-      
+
       if (isDefined(mixedValue)) {
         // TypeScript가 여기서 mixedValue를 string으로 인식해야 함
         expect(typeof mixedValue).toBe('string');
@@ -54,7 +54,7 @@ describe('types - Additional Type Guards', () => {
       expect(isBigInt(BigInt(123))).toBe(true);
       expect(isBigInt(BigInt(-456))).toBe(true);
       expect(isBigInt(BigInt(9007199254740991))).toBe(true);
-      
+
       // 리터럴 문법
       expect(isBigInt(0n)).toBe(true);
       expect(isBigInt(123n)).toBe(true);
@@ -78,14 +78,14 @@ describe('types - Additional Type Guards', () => {
       // Number.MAX_SAFE_INTEGER를 넘는 값들
       expect(isBigInt(BigInt('9007199254740992'))).toBe(true);
       expect(isBigInt(9007199254740992n)).toBe(true);
-      
+
       // 일반 숫자로는 정확하게 표현할 수 없는 값
       expect(isBigInt(9007199254740992)).toBe(false); // 이것은 일반 number
     });
 
     test('타입 가드 기능', () => {
       const mixedValue: bigint | number = Math.random() > 0.5 ? 123n : 123;
-      
+
       if (isBigInt(mixedValue)) {
         // TypeScript가 여기서 mixedValue를 bigint로 인식해야 함
         expect(typeof mixedValue).toBe('bigint');
@@ -98,7 +98,7 @@ describe('types - Additional Type Guards', () => {
       async function testAsync() {
         return 'test';
       }
-      
+
       expect(isAsyncFunction(testAsync)).toBe(true);
     });
 
@@ -111,9 +111,9 @@ describe('types - Additional Type Guards', () => {
       const obj = {
         async method() {
           return 'test';
-        }
+        },
       };
-      
+
       expect(isAsyncFunction(obj.method)).toBe(true);
     });
 
@@ -121,13 +121,13 @@ describe('types - Additional Type Guards', () => {
       function normalFunc() {
         return 'test';
       }
-      
+
       const arrowFunc = () => 'test';
-      
+
       function* generatorFunc() {
         yield 'test';
       }
-      
+
       expect(isAsyncFunction(normalFunc)).toBe(false);
       expect(isAsyncFunction(arrowFunc)).toBe(false);
       expect(isAsyncFunction(generatorFunc)).toBe(false);
@@ -145,17 +145,15 @@ describe('types - Additional Type Guards', () => {
     test('Promise와 구분', () => {
       const promise = Promise.resolve('test');
       expect(isAsyncFunction(promise)).toBe(false);
-      
+
       const promiseConstructor = Promise;
       expect(isAsyncFunction(promiseConstructor)).toBe(false);
     });
 
     test('타입 가드 기능', () => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-      const mixedFunc: Function | any = Math.random() > 0.5 
-        ? async () => 'async' 
-        : () => 'sync';
-      
+      const mixedFunc: Function | any = Math.random() > 0.5 ? async () => 'async' : () => 'sync';
+
       if (isAsyncFunction(mixedFunc)) {
         // TypeScript가 여기서 mixedFunc를 AsyncFunction으로 인식해야 함
         expect(mixedFunc.constructor.name).toBe('AsyncFunction');
@@ -169,7 +167,7 @@ describe('types - Additional Type Guards', () => {
         yield 1;
         yield 2;
       }
-      
+
       const generator = asyncGen();
       expect(isAsyncGenerator(generator)).toBe(true);
     });
@@ -179,7 +177,7 @@ describe('types - Additional Type Guards', () => {
         yield 1;
         yield 2;
       }
-      
+
       const generator = normalGen();
       expect(isAsyncGenerator(generator)).toBe(false);
     });
@@ -200,7 +198,7 @@ describe('types - Additional Type Guards', () => {
         yield 1;
         yield 2;
       }
-      
+
       expect(isAsyncGeneratorFunction(asyncGenFunc)).toBe(true);
     });
 
@@ -209,7 +207,7 @@ describe('types - Additional Type Guards', () => {
         yield 1;
         yield 2;
       }
-      
+
       expect(isAsyncGeneratorFunction(normalGenFunc)).toBe(false);
     });
 
@@ -217,7 +215,7 @@ describe('types - Additional Type Guards', () => {
       async function asyncFunc() {
         return 'test';
       }
-      
+
       expect(isAsyncGeneratorFunction(asyncFunc)).toBe(false);
     });
 
@@ -225,9 +223,9 @@ describe('types - Additional Type Guards', () => {
       function normalFunc() {
         return 'test';
       }
-      
+
       const arrowFunc = () => 'test';
-      
+
       expect(isAsyncGeneratorFunction(normalFunc)).toBe(false);
       expect(isAsyncGeneratorFunction(arrowFunc)).toBe(false);
     });
@@ -248,9 +246,9 @@ describe('types - Additional Type Guards', () => {
           yield 1;
           yield 2;
           yield 3;
-        }
+        },
       };
-      
+
       expect(isAsyncIterable(asyncIterable)).toBe(true);
     });
 
@@ -259,7 +257,7 @@ describe('types - Additional Type Guards', () => {
         yield 1;
         yield 2;
       }
-      
+
       const generator = asyncGen();
       expect(isAsyncIterable(generator)).toBe(true);
     });
@@ -270,9 +268,9 @@ describe('types - Additional Type Guards', () => {
           yield 1;
           yield 2;
           yield 3;
-        }
+        },
       };
-      
+
       expect(isAsyncIterable(normalIterable)).toBe(false);
     });
 
@@ -322,16 +320,18 @@ describe('types - Additional Type Guards', () => {
         undefined,
         123n,
         async () => 'test',
-        (async function* () { yield 1; })(),
-        'string'
+        (async function* () {
+          yield 1;
+        })(),
+        'string',
       ];
 
-      values.forEach(value => {
+      values.forEach((value) => {
         const results = {
           isDefined: isDefined(value),
           isBigInt: isBigInt(value),
           isAsyncFunction: isAsyncFunction(value),
-          isAsyncGenerator: isAsyncGenerator(value)
+          isAsyncGenerator: isAsyncGenerator(value),
         };
 
         // 각 값은 정확히 하나의 타입이어야 함 (undefined 제외)
@@ -339,9 +339,9 @@ describe('types - Additional Type Guards', () => {
           expect(results.isDefined).toBe(false);
         } else {
           expect(results.isDefined).toBe(true);
-          
+
           // 나머지 타입 중 최대 하나만 true여야 함
-          const trueCount = Object.values(results).filter(r => r === true).length;
+          const trueCount = Object.values(results).filter((r) => r === true).length;
           expect(trueCount).toBeGreaterThanOrEqual(1);
         }
       });
@@ -350,13 +350,13 @@ describe('types - Additional Type Guards', () => {
     test('성능 테스트 (반복 호출)', () => {
       const testValue = 123n;
       const iterations = 1000;
-      
+
       const start = performance.now();
       for (let i = 0; i < iterations; i++) {
         isBigInt(testValue);
       }
       const end = performance.now();
-      
+
       // 1000번 호출이 10ms 이내에 완료되어야 함
       expect(end - start).toBeLessThan(10);
     });

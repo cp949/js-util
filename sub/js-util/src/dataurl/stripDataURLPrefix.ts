@@ -7,11 +7,11 @@ export function stripDataURLPrefix(dataURL: string): string | undefined {
   if (!dataURL.startsWith('data:')) {
     return undefined;
   }
-  
+
   const commaIndex = dataURL.indexOf(',');
   if (commaIndex === -1) {
     return undefined;
   }
-  
+
   return dataURL.substring(commaIndex + 1);
 }

@@ -43,7 +43,7 @@ describe('parray - isArraySorted', () => {
   describe('커스텀 comparator', () => {
     test('내림차순 정렬 확인', () => {
       const desc = (a: number, b: number) => b - a;
-      
+
       expect(isArraySorted([5, 4, 3, 2, 1], desc)).toBe(true);
       expect(isArraySorted([1, 2, 3, 4, 5], desc)).toBe(false);
       expect(isArraySorted([5, 5, 3, 1], desc)).toBe(true);
@@ -54,28 +54,28 @@ describe('parray - isArraySorted', () => {
         name: string;
         age: number;
       }
-      
+
       const people: Person[] = [
         { name: 'Alice', age: 20 },
         { name: 'Bob', age: 25 },
-        { name: 'Charlie', age: 30 }
+        { name: 'Charlie', age: 30 },
       ];
-      
+
       // 나이순 정렬 확인
       const ageComparator = (a: Person, b: Person) => a.age - b.age;
       expect(isArraySorted(people, ageComparator)).toBe(true);
-      
+
       const unsortedPeople: Person[] = [
         { name: 'Alice', age: 30 },
         { name: 'Bob', age: 20 },
-        { name: 'Charlie', age: 25 }
+        { name: 'Charlie', age: 25 },
       ];
       expect(isArraySorted(unsortedPeople, ageComparator)).toBe(false);
     });
 
     test('문자열 길이순 정렬', () => {
       const lengthComparator = (a: string, b: string) => a.length - b.length;
-      
+
       expect(isArraySorted(['a', 'ab', 'abc'], lengthComparator)).toBe(true);
       expect(isArraySorted(['abc', 'ab', 'a'], lengthComparator)).toBe(false);
       expect(isArraySorted(['hi', 'yo', 'abc'], lengthComparator)).toBe(true); // 같은 길이
@@ -103,7 +103,7 @@ describe('parray - isArraySorted', () => {
       // 우리 구현에서는 NaN, null, undefined가 있으면 정렬되지 않은 것으로 판단
       expect(isArraySorted([1, 2, NaN])).toBe(false); // NaN 포함 시 false
       expect(isArraySorted([NaN, 1, 2])).toBe(false); // NaN 포함 시 false
-      
+
       // Infinity는 정상 숫자로 처리
       expect(isArraySorted([1, 2, Infinity])).toBe(true);
       expect(isArraySorted([-Infinity, 0, Infinity])).toBe(true);
@@ -114,7 +114,7 @@ describe('parray - isArraySorted', () => {
     test('큰 배열에서도 정상 동작', () => {
       const largeArray = Array.from({ length: 1000 }, (_, i) => i);
       expect(isArraySorted(largeArray)).toBe(true);
-      
+
       const reversedArray = Array.from({ length: 1000 }, (_, i) => 1000 - i);
       expect(isArraySorted(reversedArray)).toBe(false);
     });
@@ -145,7 +145,7 @@ describe('parray - isArraySorted', () => {
       // null/undefined 비교는 특별한 동작을 보임
       expect(isArraySorted([null, undefined])).toBe(false); // null > undefined는 false
       expect(isArraySorted([undefined, null])).toBe(false); // undefined > null도 false
-      
+
       // null과 숫자 비교 - 우리 구현에서는 null/undefined 있으면 false
       expect(isArraySorted([null, 1] as any)).toBe(false); // null 포함 시 false
       expect(isArraySorted([1, null] as any)).toBe(false); // null 포함 시 false

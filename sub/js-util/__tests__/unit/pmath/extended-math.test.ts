@@ -15,7 +15,7 @@ import {
   wrapIndexArray,
   wrapAngle180,
   wrapRange,
-  wrapRangeArray
+  wrapRangeArray,
 } from '../../../src/pmath/index.js';
 import { sineInOut } from '../../../src/easing/index.js';
 
@@ -25,7 +25,7 @@ describe('pmath - Extended Math Functions', () => {
       expect(cos(0)).toBe(1);
       expect(cos(Math.PI / 2)).toBe(0);
       expect(cos(Math.PI)).toBe(-1);
-      expect(cos(3 * Math.PI / 2)).toBe(0);
+      expect(cos((3 * Math.PI) / 2)).toBe(0);
     });
 
     test('일반적인 각도에서 Math.cos와 동일', () => {
@@ -202,7 +202,7 @@ describe('pmath - Extended Math Functions', () => {
       expect(sin(0)).toBe(0);
       expect(sin(Math.PI / 2)).toBe(1);
       expect(sin(Math.PI)).toBe(0);
-      expect(sin(3 * Math.PI / 2)).toBe(-1);
+      expect(sin((3 * Math.PI) / 2)).toBe(-1);
     });
 
     test('일반적인 각도에서 Math.sin과 동일', () => {

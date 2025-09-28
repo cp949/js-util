@@ -118,7 +118,7 @@ describe('pmisc - pathUtil', () => {
         dir: '/home/user/documents',
         base: 'file.txt',
         ext: '.txt',
-        name: 'file'
+        name: 'file',
       });
     });
 
@@ -129,7 +129,7 @@ describe('pmisc - pathUtil', () => {
         dir: 'documents',
         base: 'file.txt',
         ext: '.txt',
-        name: 'file'
+        name: 'file',
       });
     });
 
@@ -140,7 +140,7 @@ describe('pmisc - pathUtil', () => {
         dir: '/home/user',
         base: 'filename',
         ext: '',
-        name: 'filename'
+        name: 'filename',
       });
     });
 
@@ -151,7 +151,7 @@ describe('pmisc - pathUtil', () => {
         dir: '/home/user',
         base: '.bashrc',
         ext: '',
-        name: '.bashrc'
+        name: '.bashrc',
       });
     });
 
@@ -162,7 +162,7 @@ describe('pmisc - pathUtil', () => {
         dir: '/home/user',
         base: '.config.json',
         ext: '.json',
-        name: '.config'
+        name: '.config',
       });
     });
 
@@ -173,7 +173,7 @@ describe('pmisc - pathUtil', () => {
         dir: '/home',
         base: 'user',
         ext: '',
-        name: 'user'
+        name: 'user',
       });
     });
 
@@ -184,7 +184,7 @@ describe('pmisc - pathUtil', () => {
         dir: '/',
         base: '',
         ext: '',
-        name: ''
+        name: '',
       });
     });
 
@@ -195,7 +195,7 @@ describe('pmisc - pathUtil', () => {
         dir: '',
         base: '',
         ext: '',
-        name: ''
+        name: '',
       });
     });
 
@@ -206,7 +206,7 @@ describe('pmisc - pathUtil', () => {
         dir: '',
         base: 'file.txt',
         ext: '.txt',
-        name: 'file'
+        name: 'file',
       });
     });
 
@@ -217,7 +217,7 @@ describe('pmisc - pathUtil', () => {
         dir: '/path',
         base: 'file.tar.gz',
         ext: '.gz',
-        name: 'file.tar'
+        name: 'file.tar',
       });
     });
 
@@ -227,7 +227,7 @@ describe('pmisc - pathUtil', () => {
         dir: '/home',
         base: '..',
         ext: '',
-        name: '..'
+        name: '..',
       });
 
       expect(pathUtil.parse('/home/.')).toEqual({
@@ -235,7 +235,7 @@ describe('pmisc - pathUtil', () => {
         dir: '/home',
         base: '.',
         ext: '',
-        name: '.'
+        name: '.',
       });
     });
 
@@ -261,13 +261,13 @@ describe('pmisc - pathUtil', () => {
     test('isAbsolute와 normalize 조합', () => {
       const path1 = '/foo/../bar';
       const path2 = 'foo/../bar';
-      
+
       expect(pathUtil.isAbsolute(path1)).toBe(true);
       expect(pathUtil.isAbsolute(path2)).toBe(false);
-      
+
       const normalized1 = pathUtil.normalize(path1);
       const normalized2 = pathUtil.normalize(path2);
-      
+
       expect(pathUtil.isAbsolute(normalized1)).toBe(true);
       expect(pathUtil.isAbsolute(normalized2)).toBe(false);
     });
@@ -278,10 +278,10 @@ describe('pmisc - pathUtil', () => {
       const userPath = '../../../etc/passwd';
       const fullPath = pathUtil.join(basePath, userPath);
       const normalizedPath = pathUtil.normalize(fullPath);
-      
+
       expect(normalizedPath).toBe('/etc/passwd');
       expect(pathUtil.isAbsolute(normalizedPath)).toBe(true);
-      
+
       const parsed = pathUtil.parse(normalizedPath);
       expect(parsed.dir).toBe('/etc');
       expect(parsed.name).toBe('passwd');
@@ -315,13 +315,8 @@ describe('pmisc - pathUtil', () => {
   describe('성능 테스트', () => {
     test('대량 경로 처리 성능', () => {
       const iterations = 1000;
-      const paths = [
-        '/foo/bar/baz',
-        '../foo/bar',
-        './foo/../bar',
-        '/foo/./bar/../baz'
-      ];
-      
+      const paths = ['/foo/bar/baz', '../foo/bar', './foo/../bar', '/foo/./bar/../baz'];
+
       const start = performance.now();
       for (let i = 0; i < iterations; i++) {
         const path = paths[i % paths.length];
@@ -330,7 +325,7 @@ describe('pmisc - pathUtil', () => {
         pathUtil.parse(path);
       }
       const end = performance.now();
-      
+
       // 1000번 연산이 100ms 이내에 완료되어야 함
       expect(end - start).toBeLessThan(100);
     });

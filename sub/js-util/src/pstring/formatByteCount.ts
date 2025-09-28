@@ -14,6 +14,6 @@ export function formatByteCount(size: number): string {
   const formatted = n < 10 && l > 0 ? n.toFixed(1) : n.toFixed(0);
   // Remove .0 if it's a whole number
   const cleanFormatted = formatted.replace(/\.0$/, '');
-  
+
   return cleanFormatted + ' ' + units[l];
 }

@@ -14,7 +14,7 @@ export function extractMimeType(dataURL: string): string | undefined {
   if (typeof dataURL !== 'string' || !dataURL) {
     return undefined;
   }
-  
+
   // "data:"로 시작하는지 확인
   if (!dataURL.startsWith('data:')) {
     return undefined;
@@ -28,7 +28,7 @@ export function extractMimeType(dataURL: string): string | undefined {
 
   // "data:"와 "," 사이의 헤더 부분 추출
   const header = dataURL.substring(5, commaIndex); // "data:" 다음부터 ","까지
-  
+
   if (!header) {
     // 빈 헤더의 경우 undefined 반환 (주석 예시와 일치)
     return undefined;
@@ -37,7 +37,7 @@ export function extractMimeType(dataURL: string): string | undefined {
   // 세미콜론으로 분리하여 MIME 타입 추출
   const parts = header.split(';');
   const mimeType = parts[0].trim();
-  
+
   // MIME 타입이 빈 문자열이면 undefined
   if (!mimeType) {
     return undefined;

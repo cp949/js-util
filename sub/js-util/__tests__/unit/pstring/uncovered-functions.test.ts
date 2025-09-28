@@ -76,11 +76,13 @@ describe('pstring - Uncovered Functions', () => {
         negInfinity: -Infinity,
         nan: NaN,
         nested: {
-          value: Infinity
-        }
+          value: Infinity,
+        },
       };
       const result = stringify(obj);
-      expect(result).toBe('{"normal":42,"infinity":0,"negInfinity":0,"nan":0,"nested":{"value":0}}');
+      expect(result).toBe(
+        '{"normal":42,"infinity":0,"negInfinity":0,"nan":0,"nested":{"value":0}}',
+      );
     });
 
     test('should handle arrays with special numbers', () => {

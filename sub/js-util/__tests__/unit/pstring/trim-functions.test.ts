@@ -53,7 +53,7 @@ describe('pstring - Trim Functions', () => {
 
     test('should behave identically to trimToUndefined', () => {
       const testCases = ['', '   ', 'hello', '  hello  ', null, undefined, 'a', ' a '];
-      testCases.forEach(testCase => {
+      testCases.forEach((testCase) => {
         expect(trimToUndef(testCase)).toBe(trimToUndefined(testCase));
       });
     });

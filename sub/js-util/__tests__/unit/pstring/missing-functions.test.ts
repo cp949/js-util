@@ -28,7 +28,7 @@ import {
   trimToNull,
   trimToUndef,
   trunc,
-  truncMiddle
+  truncMiddle,
 } from '../../../src/pstring/index.js';
 
 // slugify는 default export이므로 별도 import
@@ -136,8 +136,9 @@ describe('pstring - Missing Functions', () => {
     });
 
     test('모든 HTML 특수문자 조합', () => {
-      expect(escapeHtml('<div class="test" data-value=\'123\'>Tom & Jerry</div>'))
-        .toBe('&lt;div class=&quot;test&quot; data-value=&#39;123&#39;&gt;Tom &amp; Jerry&lt;/div&gt;');
+      expect(escapeHtml('<div class="test" data-value=\'123\'>Tom & Jerry</div>')).toBe(
+        '&lt;div class=&quot;test&quot; data-value=&#39;123&#39;&gt;Tom &amp; Jerry&lt;/div&gt;',
+      );
     });
 
     test('일반 문자열은 그대로', () => {
@@ -243,7 +244,7 @@ describe('pstring - Missing Functions', () => {
       const existingNames = new Set(['test1', 'test2']);
       const str1 = generateUniqueString('test', existingNames);
       expect(str1).toBe('test');
-      
+
       existingNames.add('test');
       const str2 = generateUniqueString('test', existingNames);
       expect(str2).toBe('test3'); // test1, test2가 이미 있으므로 test3
@@ -460,18 +461,20 @@ describe('pstring - Missing Functions', () => {
 
   describe('truncMiddle', () => {
     test('중간 부분 자르기', () => {
-      expect(truncMiddle('This is a long string that needs truncating.', { length: 20 }))
-        .toBe('This is a...ncating.');
-      
-      expect(truncMiddle('Short', { length: 20 }))
-        .toBe('Short');
+      expect(truncMiddle('This is a long string that needs truncating.', { length: 20 })).toBe(
+        'This is a...ncating.',
+      );
+
+      expect(truncMiddle('Short', { length: 20 })).toBe('Short');
     });
 
     test('커스텀 omission', () => {
-      expect(truncMiddle('This is a long string that needs truncating.', { 
-        length: 20, 
-        omission: '[...]' 
-      })).toBe('This is [...]cating.');
+      expect(
+        truncMiddle('This is a long string that needs truncating.', {
+          length: 20,
+          omission: '[...]',
+        }),
+      ).toBe('This is [...]cating.');
     });
 
     test('기본 옵션', () => {
@@ -512,7 +515,9 @@ describe('pstring - Missing Functions', () => {
     });
 
     test('반복 제거 - repeat=true', () => {
-      expect(removePrefix('httpHttpHttp://example.com', 'http', true)).toBe('HttpHttp://example.com');
+      expect(removePrefix('httpHttpHttp://example.com', 'http', true)).toBe(
+        'HttpHttp://example.com',
+      );
       expect(removePrefix('prefixprefixdata', 'prefix', true)).toBe('data');
       expect(removePrefix('aaaaab', 'a', true)).toBe('b');
     });
@@ -569,7 +574,9 @@ describe('pstring - Missing Functions', () => {
     });
 
     test('반복 제거 - repeat=true', () => {
-      expect(removeSuffix('example.com/Http/Http/http', 'http', true)).toBe('example.com/Http/Http/');
+      expect(removeSuffix('example.com/Http/Http/http', 'http', true)).toBe(
+        'example.com/Http/Http/',
+      );
       expect(removeSuffix('datasuffixsuffix', 'suffix', true)).toBe('data');
       expect(removeSuffix('baaaaa', 'a', true)).toBe('b');
     });
