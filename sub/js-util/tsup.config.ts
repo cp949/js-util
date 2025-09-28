@@ -15,6 +15,7 @@ export default defineConfig((options) => {
       'math/index': 'src/pmath/index.ts',
       'misc/index': 'src/pmisc/index.ts',
       'http/index': 'src/phttp/index.ts',
+      'color/index': 'src/color/index.ts',
       'dataurl/index': 'src/dataurl/index.ts',
       'dom/index': 'src/dom/index.ts',
       'fn/index': 'src/fn/index.ts',
